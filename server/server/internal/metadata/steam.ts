@@ -925,16 +925,10 @@ export class SteamProvider implements MetadataProvider {
   }
 
   private _convertBasicHtmlElements(markdown: string): string {
-    // Remove HTML comments. Repeat until stable so that crafted input like
-    // "<!--><!-->" (which leaves "<!-->" after one pass) cannot survive as a
-    // live comment opener.
-    let previous: string;
-    do {
-      previous = markdown;
-      markdown = markdown.replace(/<!--[\s\S]*?-->/g, "");
-      // Also strip any dangling comment openers left over after removal.
-      markdown = markdown.replace(/<!--[\s\S]*$/g, "");
-    } while (markdown !== previous);
+    // Neutralize HTML comments by removing every '<!--' opener regardless of
+    // whether a matching '-->' exists, so no fragment of a comment can
+    // survive — including crafted input like "<!--><!-->".
+    markdown = markdown.replace(/<!--[\s\S]*?(?:-->|$)/g, "");
 
     // Convert the bullet points and tabs to markdown list format
     markdown = markdown.replace(/•\s*\t+/g, "\n- ");
@@ -1131,7 +1125,14 @@ export class SteamProvider implements MetadataProvider {
     // Strip tags first, then decode entities in a single pass. Decoding
     // &amp; before other entities would let crafted input like
     // "&amp;lt;script&amp;gt;" turn into live markup.
-    const withoutTags = html.replace(/<[^>]*>/g, "");
-    return this._decodeHtmlEntities(withoutTags);
+    let text = this._decodeHtmlEntities(html.replace(/<[^>]*>/g, ""));
+    // Decoding can resurrect tag-like sequences (e.g. "&lt;script" became
+    // "<script" above). Strip them again so the output never contains one.
+    while (/<(?:script|style|iframe|object|embed)[^>]*>/i.test(text)) {
+      const next = text.replace(/<[^>]*>/g, "");
+      if (next === text) break;
+      text = next;
+    }
+    return text;
   }
 }

@@ -32,53 +32,75 @@ export class FsObjectBackend extends ObjectBackend {
 
   async fetch(id: ObjectReference) {
     const objectPath = path.join(this.baseObjectPath, id);
+    // Open the file first and stream from the handle, so there is no window
+    // between checking the file and using it.
+    let handle: fs.promises.FileHandle;
     try {
-      await fs.promises.access(objectPath, fs.constants.F_OK);
+      handle = await fs.promises.open(objectPath, "r");
     } catch {
       return undefined;
     }
-    return fs.createReadStream(objectPath);
+    try {
+      const stat = await handle.stat();
+      if (!stat.isFile()) {
+        await handle.close();
+        return undefined;
+      }
+    } catch {
+      await handle.close();
+      return undefined;
+    }
+    // createReadStream on the fd keeps reads tied to the opened inode.
+    return fs
+      .createReadStream(undefined as unknown as string, {
+        fd: handle.fd,
+        autoClose: true,
+      })
+      .on("close", () => void handle.close().catch(() => {}));
   }
   async write(id: ObjectReference, source: Source): Promise<boolean> {
     const objectPath = path.join(this.baseObjectPath, id);
-    let stat: fs.Stats | undefined;
+    // Open with 'r+' so we only write to a file that already exists (created
+    // via create()); the check and the write go through the same fd.
+    let handle: fs.promises.FileHandle;
     try {
-      stat = await fs.promises.stat(objectPath);
+      handle = await fs.promises.open(objectPath, "r+");
     } catch {
       return false;
     }
-    if (!stat.isFile()) return false;
 
     // remove item from cache
     await this.hashStore.delete(id);
 
-    if (source instanceof Readable) {
-      // Open with 'r+' so we only write to an existing file created via create().
-      const handle = await fs.promises.open(objectPath, "r+");
-      const outputStream = handle.createWriteStream();
-      source.pipe(outputStream, { end: true });
-      await new Promise((r, _j) => source.on("end", r));
-      return true;
-    }
+    try {
+      if (source instanceof Readable) {
+        const outputStream = handle.createWriteStream();
+        source.pipe(outputStream, { end: true });
+        await new Promise((r, _j) => source.on("end", r));
+        return true;
+      }
 
-    if (source instanceof Buffer) {
-      fs.writeFileSync(objectPath, source, { flag: "r+" });
-      return true;
-    }
+      if (source instanceof Buffer) {
+        await handle.write(source, 0, source.length);
+        return true;
+      }
 
-    return false;
+      return false;
+    } finally {
+      await handle.close().catch(() => {});
+    }
   }
   async startWriteStream(id: ObjectReference) {
     const objectPath = path.join(this.baseObjectPath, id);
+    // 'r+' fails when the file doesn't exist, replacing the existsSync pre-check.
     try {
-      await fs.promises.access(objectPath, fs.constants.F_OK);
+      const handle = await fs.promises.open(objectPath, "r+");
+      // remove item from cache
+      await this.hashStore.delete(id);
+      return handle.createWriteStream({ autoClose: true });
     } catch {
       return undefined;
     }
-    // remove item from cache
-    await this.hashStore.delete(id);
-    // Open with 'r+' so we only write to an existing file created via create().
-    return fs.createWriteStream(objectPath, { flags: "r+" });
   }
   async create(
     id: string,

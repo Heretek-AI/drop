@@ -664,17 +664,34 @@ export class SteamProvider implements MetadataProvider {
   }
 
   private _decodeHtmlEntities(text: string): string {
-    return text
-      .replace(/&nbsp;/g, " ")
-      .replace(/&amp;/g, "&")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .replace(/&#x([0-9A-Fa-f]+);/g, (_, hex) =>
-        String.fromCharCode(parseInt(hex, 16)),
-      )
-      .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+    // Decode in a single pass so decoded '&' characters cannot combine with
+    // later passes into new entities (double-unescaping).
+    return text.replace(
+      /&(?:nbsp|amp|lt|gt|quot|#39|#x[0-9A-Fa-f]+|#\d+);/g,
+      (entity) => {
+        switch (entity) {
+          case "&nbsp;":
+            return " ";
+          case "&amp;":
+            return "&";
+          case "&lt;":
+            return "<";
+          case "&gt;":
+            return ">";
+          case "&quot;":
+            return '"';
+          case "&#39;":
+            return "'";
+          default: {
+            const hex = entity.match(/&#x([0-9A-Fa-f]+);/);
+            if (hex) return String.fromCharCode(parseInt(hex[1]!, 16));
+            const dec = entity.match(/&#(\d+);/);
+            if (dec) return String.fromCharCode(parseInt(dec[1]!, 10));
+            return entity;
+          }
+        }
+      },
+    );
   }
 
   private async _fetchGameDetails(
@@ -908,8 +925,16 @@ export class SteamProvider implements MetadataProvider {
   }
 
   private _convertBasicHtmlElements(markdown: string): string {
-    // Remove HTML comments
-    markdown = markdown.replace(/<!--[\s\S]*?-->/g, "");
+    // Remove HTML comments. Repeat until stable so that crafted input like
+    // "<!--><!-->" (which leaves "<!-->" after one pass) cannot survive as a
+    // live comment opener.
+    let previous: string;
+    do {
+      previous = markdown;
+      markdown = markdown.replace(/<!--[\s\S]*?-->/g, "");
+      // Also strip any dangling comment openers left over after removal.
+      markdown = markdown.replace(/<!--[\s\S]*$/g, "");
+    } while (markdown !== previous);
 
     // Convert the bullet points and tabs to markdown list format
     markdown = markdown.replace(/•\s*\t+/g, "\n- ");
@@ -1103,13 +1128,10 @@ export class SteamProvider implements MetadataProvider {
   }
 
   private _stripHtmlTags(html: string): string {
-    return html
-      .replace(/<[^>]*>/g, "")
-      .replace(/&nbsp;/g, " ")
-      .replace(/&amp;/g, "&")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'");
+    // Strip tags first, then decode entities in a single pass. Decoding
+    // &amp; before other entities would let crafted input like
+    // "&amp;lt;script&amp;gt;" turn into live markup.
+    const withoutTags = html.replace(/<[^>]*>/g, "");
+    return this._decodeHtmlEntities(withoutTags);
   }
 }

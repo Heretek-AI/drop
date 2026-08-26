@@ -32,25 +32,37 @@ export class FsObjectBackend extends ObjectBackend {
 
   async fetch(id: ObjectReference) {
     const objectPath = path.join(this.baseObjectPath, id);
-    if (!fs.existsSync(objectPath)) return undefined;
+    try {
+      await fs.promises.access(objectPath, fs.constants.F_OK);
+    } catch {
+      return undefined;
+    }
     return fs.createReadStream(objectPath);
   }
   async write(id: ObjectReference, source: Source): Promise<boolean> {
     const objectPath = path.join(this.baseObjectPath, id);
-    if (!fs.existsSync(objectPath)) return false;
+    let stat: fs.Stats | undefined;
+    try {
+      stat = await fs.promises.stat(objectPath);
+    } catch {
+      return false;
+    }
+    if (!stat.isFile()) return false;
 
     // remove item from cache
     await this.hashStore.delete(id);
 
     if (source instanceof Readable) {
-      const outputStream = fs.createWriteStream(objectPath);
+      // Open with 'r+' so we only write to an existing file created via create().
+      const handle = await fs.promises.open(objectPath, "r+");
+      const outputStream = handle.createWriteStream();
       source.pipe(outputStream, { end: true });
       await new Promise((r, _j) => source.on("end", r));
       return true;
     }
 
     if (source instanceof Buffer) {
-      fs.writeFileSync(objectPath, source);
+      fs.writeFileSync(objectPath, source, { flag: "r+" });
       return true;
     }
 
@@ -58,10 +70,15 @@ export class FsObjectBackend extends ObjectBackend {
   }
   async startWriteStream(id: ObjectReference) {
     const objectPath = path.join(this.baseObjectPath, id);
-    if (!fs.existsSync(objectPath)) return undefined;
+    try {
+      await fs.promises.access(objectPath, fs.constants.F_OK);
+    } catch {
+      return undefined;
+    }
     // remove item from cache
     await this.hashStore.delete(id);
-    return fs.createWriteStream(objectPath);
+    // Open with 'r+' so we only write to an existing file created via create().
+    return fs.createWriteStream(objectPath, { flags: "r+" });
   }
   async create(
     id: string,
@@ -70,14 +87,18 @@ export class FsObjectBackend extends ObjectBackend {
   ): Promise<ObjectReference | undefined> {
     const objectPath = path.join(this.baseObjectPath, id);
     const metadataPath = path.join(this.baseMetadataPath, `${id}.json`);
-    if (fs.existsSync(objectPath) || fs.existsSync(metadataPath))
+
+    // Use exclusive-create flags so concurrent creates cannot clobber each
+    // other; failure here means the object already exists.
+    try {
+      // Write metadata
+      fs.writeFileSync(metadataPath, JSON.stringify(metadata), { flag: "wx" });
+
+      // Create file so write passes
+      fs.writeFileSync(objectPath, "", { flag: "wx" });
+    } catch {
       return undefined;
-
-    // Write metadata
-    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
-
-    // Create file so write passes
-    fs.writeFileSync(objectPath, "");
+    }
 
     // Call write
     this.write(id, source);
@@ -87,14 +108,17 @@ export class FsObjectBackend extends ObjectBackend {
   async createWithWriteStream(id: string, metadata: ObjectMetadata) {
     const objectPath = path.join(this.baseObjectPath, id);
     const metadataPath = path.join(this.baseMetadataPath, `${id}.json`);
-    if (fs.existsSync(objectPath) || fs.existsSync(metadataPath))
+
+    // Exclusive-create flags prevent concurrent creates from clobbering.
+    try {
+      // Write metadata
+      fs.writeFileSync(metadataPath, JSON.stringify(metadata), { flag: "wx" });
+
+      // Create file so write passes
+      fs.writeFileSync(objectPath, "", { flag: "wx" });
+    } catch {
       return undefined;
-
-    // Write metadata
-    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
-
-    // Create file so write passes
-    fs.writeFileSync(objectPath, "");
+    }
 
     const stream = await this.startWriteStream(id);
     if (!stream) throw new Error("Could not create write stream");
@@ -102,11 +126,17 @@ export class FsObjectBackend extends ObjectBackend {
   }
   async delete(id: ObjectReference): Promise<boolean> {
     const objectPath = path.join(this.baseObjectPath, id);
-    if (!fs.existsSync(objectPath)) return true;
-    fs.rmSync(objectPath);
+    try {
+      await fs.promises.rm(objectPath);
+    } catch {
+      return true;
+    }
     const metadataPath = path.join(this.baseMetadataPath, `${id}.json`);
-    if (!fs.existsSync(metadataPath)) return true;
-    fs.rmSync(metadataPath);
+    try {
+      await fs.promises.rm(metadataPath);
+    } catch {
+      // Metadata may already be gone; nothing to do.
+    }
     // remove item from caches
     await this.metadataCache.remove(id);
     await this.hashStore.delete(id);
@@ -119,9 +149,13 @@ export class FsObjectBackend extends ObjectBackend {
     if (cacheResult !== null) return cacheResult;
 
     const metadataPath = path.join(this.baseMetadataPath, `${id}.json`);
-    if (!fs.existsSync(metadataPath)) return undefined;
-    const metadataRaw = JSON.parse(fs.readFileSync(metadataPath, "utf-8"));
-    const metadata = objectMetadata(metadataRaw);
+    let metadataRaw: string;
+    try {
+      metadataRaw = await fs.promises.readFile(metadataPath, "utf-8");
+    } catch {
+      return undefined;
+    }
+    const metadata = objectMetadata(JSON.parse(metadataRaw));
     if (metadata instanceof type.errors) {
       logger.error(
         { summary: metadata.summary },
@@ -137,8 +171,13 @@ export class FsObjectBackend extends ObjectBackend {
     metadata: ObjectMetadata,
   ): Promise<boolean> {
     const metadataPath = path.join(this.baseMetadataPath, `${id}.json`);
-    if (!fs.existsSync(metadataPath)) return false;
-    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
+    try {
+      await fs.promises.writeFile(metadataPath, JSON.stringify(metadata), {
+        flag: "r+",
+      });
+    } catch {
+      return false;
+    }
     await this.metadataCache.set(id, metadata);
     return true;
   }

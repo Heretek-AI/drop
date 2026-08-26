@@ -5,6 +5,7 @@ packages:
   - "desktop/"
 
 onlyBuiltDependencies:
+  - "@ast-grep/cli"
   - "@bufbuild/buf"
   - "@parcel/watcher"
   - "@prisma/client"
@@ -17,6 +18,7 @@ onlyBuiltDependencies:
   - unrs-resolver
   - contentlayer
   - contentlayer2
+  - lefthook
   - protobufjs
 
 overrides:

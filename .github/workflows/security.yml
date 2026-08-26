@@ -1,0 +1,65 @@
+name: Security
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+  schedule:
+    # Weekly Monday 06:06 UTC — catches new advisories between PRs.
+    - cron: "6 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history for leak detection
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cargo-audit:
+    name: Rust advisory audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        crate:
+          - cli
+          - torrential
+          - desktop/src-tauri
+          - libraries/droplet
+          - libraries/droplet_types
+          - libraries/libarchive
+          - libraries/native_model
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly # matches droplet-ci
+      - uses: taiki-e/install-action@cargo-audit
+      - name: Audit ${{ matrix.crate }}
+        run: cargo audit --file Cargo.lock
+        working-directory: ${{ matrix.crate }}
+
+  golangci:
+    name: Go lint (backend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # needed for --new-from-rev against origin/develop
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.work
+      - uses: golangci/golangci-lint-action@v8
+        with:
+          working-directory: backend
+          # Rollout mode: only report issues on changed lines. Remove once the
+          # existing debt (2 issues in core/database.go) is cleaned up.
+          args: --new-from-rev=origin/develop ./core/...

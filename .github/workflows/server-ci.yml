@@ -69,3 +69,32 @@ jobs:
       - name: Lint
         working-directory: server
         run: pnpm run lint
+
+  knip:
+    name: Dependency & export report (non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true # report-only rollout phase; remove once triaged
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Knip report
+        run: pnpm exec knip --reporter json > knip-report.json || true
+
+      - name: Upload knip report
+        uses: actions/upload-artifact@v4
+        with:
+          name: knip-report
+          path: knip-report.json

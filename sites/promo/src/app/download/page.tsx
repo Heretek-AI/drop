@@ -18,7 +18,8 @@ function Header() {
         Download
       </Heading>
       <Lead className="mt-6 max-w-3xl">
-        Download the latest version of the Drop Desktop Client for your platform.
+        Download the latest version of the Drop Desktop Client for your
+        platform.
       </Lead>
       <Subheading className="mt-2">Last updated 15-11-2025</Subheading>
     </Container>

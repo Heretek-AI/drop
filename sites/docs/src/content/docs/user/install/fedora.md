@@ -20,6 +20,7 @@ It will open it in the Software app. You can click Install on this page.
 ---
 
 You can also choose to install it via `dnf`:
+
 ```bash
 sudo dnf install ./<downloaded .rpm package>
 ```

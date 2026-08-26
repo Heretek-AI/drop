@@ -13,7 +13,7 @@ export function setupHooks() {
 
   listen("auth/failed", (event) => {
     router.push(
-      `/auth/failed?error=${encodeURIComponent(event.payload as string)}`
+      `/auth/failed?error=${encodeURIComponent(event.payload as string)}`,
     );
   });
 
@@ -32,7 +32,7 @@ export function setupHooks() {
         ).toString()}"`,
         buttonText: "Close",
       },
-      (e, c) => c()
+      (e, c) => c(),
     );
   });
 
@@ -51,7 +51,7 @@ export function setupHooks() {
           await invoke("open_process_logs", { gameId: event.payload });
         }
         c();
-      }
+      },
     );
   });
 

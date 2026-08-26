@@ -42,10 +42,7 @@ function CTA() {
             >
               OpenCollective &rarr;
             </Button>
-            <Button
-              className="w-full sm:w-auto"
-              href="/about#team"
-            >
+            <Button className="w-full sm:w-auto" href="/about#team">
               Team &rarr;
             </Button>
           </div>

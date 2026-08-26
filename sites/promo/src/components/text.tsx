@@ -37,7 +37,7 @@ export function Subheading({
       data-dark={dark ? 'true' : undefined}
       className={clsx(
         className,
-        'font-mono text-xs/5 font-semibold tracking-widest uppercase text-zinc-500',
+        'font-mono text-xs/5 font-semibold tracking-widest text-zinc-500 uppercase',
       )}
     />
   )

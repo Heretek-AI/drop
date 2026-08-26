@@ -43,7 +43,7 @@
         </ol>
       </div>
     </div>
-    <WindowControl  />
+    <WindowControl />
   </div>
 </template>
 

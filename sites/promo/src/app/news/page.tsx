@@ -8,5 +8,9 @@ export const metadata: Metadata = {
 }
 
 export default function NewsPage() {
-  return <Suspense><News /></Suspense>
+  return (
+    <Suspense>
+      <News />
+    </Suspense>
+  )
 }

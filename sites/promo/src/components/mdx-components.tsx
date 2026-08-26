@@ -1,4 +1,4 @@
-import type { MDXComponents } from 'mdx/types';
+import type { MDXComponents } from 'mdx/types'
 import Link from 'next/link'
 
 const components: MDXComponents = {
@@ -38,7 +38,7 @@ const components: MDXComponents = {
   ),
   code: ({ children }) => (
     <>
-      <code className="text-[15px]/8 font-semibold text-zinc-300 bg-zinc-800 p-4 rounded-xl w-full">
+      <code className="w-full rounded-xl bg-zinc-800 p-4 text-[15px]/8 font-semibold text-zinc-300">
         {children}
       </code>
     </>

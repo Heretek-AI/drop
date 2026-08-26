@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   description: 'A collection of screenshots, across all components of Drop.',
 }
 
-
 export default function About() {
   return (
     <main className="overflow-hidden">

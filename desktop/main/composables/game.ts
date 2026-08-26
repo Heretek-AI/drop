@@ -8,8 +8,9 @@ import type {
   RawGameStatus,
 } from "~/types";
 
-const gameRegistry: { [key: string]: { game: Game; version: Ref<GameVersion | undefined> } } =
-  {};
+const gameRegistry: {
+  [key: string]: { game: Game; version: Ref<GameVersion | undefined> };
+} = {};
 
 const gameStatusRegistry: { [key: string]: Ref<GameStatus> } = {};
 
@@ -64,8 +65,7 @@ export const useGame = async (gameId: string) => {
 };
 
 export type LaunchResult =
-  | { result: "Success" }
-  | { result: "InstallRequired"; data: [string, string] };
+  { result: "Success" } | { result: "InstallRequired"; data: [string, string] };
 
 export type VersionOption = {
   versionId: string;

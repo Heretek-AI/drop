@@ -76,11 +76,11 @@ function SponsorCard({
       ref={ref}
       style={{ opacity }}
       {...props}
-      className="relative flex w-64 rounded-3xl sm:w-72 bg-black"
+      className="relative flex w-64 rounded-3xl bg-black sm:w-72"
     >
       <figure className="relative p-10">
         <img alt={name} src={img} className="mb-4 size-12 rounded-full" />
-        <figcaption className="pb-3 border-b border-white/20">
+        <figcaption className="border-b border-white/20 pb-3">
           <p className="text-sm/6 font-medium text-white">{name}</p>
           <p className="text-sm/6 font-medium">
             <span className="bg-linear-to-r from-sky-300 from-28% via-blue-200 via-70% to-cyan-300 bg-clip-text text-transparent">

@@ -22,6 +22,7 @@ It will open it in the Software app. You can click Install on this page.
 ---
 
 You can also choose to install it via apt:
+
 ```bash
 sudo apt install ./<downloaded .deb image>
 ```

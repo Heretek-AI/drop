@@ -92,7 +92,9 @@ const open = defineModel<boolean>();
 const props = defineProps<{ gameId: string }>();
 const game = await useGame(props.gameId);
 
-const configuration: Ref<GameVersion["userConfiguration"]> = ref(game.version.value!.userConfiguration);
+const configuration: Ref<GameVersion["userConfiguration"]> = ref(
+  game.version.value!.userConfiguration,
+);
 
 const hasWindows = !!(
   game.version.value!.setups.find((v) => v.platform === "Windows") ??

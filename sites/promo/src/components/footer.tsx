@@ -21,10 +21,7 @@ function CallToAction() {
         features it has to offer.
       </p>
       <div className="mt-6">
-        <Button
-          className="w-full sm:w-auto"
-          href="/docs/admin/quickstart"
-        >
+        <Button className="w-full sm:w-auto" href="/docs/admin/quickstart">
           Quickstart &rarr;
         </Button>
       </div>
@@ -65,9 +62,7 @@ function Sitemap() {
       <div>
         <SitemapHeading>Documentation</SitemapHeading>
         <SitemapLinks>
-          <SitemapLink href="/docs">
-            Self-hosters
-          </SitemapLink>
+          <SitemapLink href="/docs">Self-hosters</SitemapLink>
           <SitemapLink href="https://developer.droposs.org/">
             Developers
           </SitemapLink>
@@ -165,8 +160,8 @@ function SocialLinks() {
 function Copyright() {
   return (
     <div className="text-xs text-zinc-400">
-      &copy; {new Date().getFullYear()} Drop OSS. Website licensed under AGPLv3 and
-      Tailwind UI Plus (where applicable).
+      &copy; {new Date().getFullYear()} Drop OSS. Website licensed under AGPLv3
+      and Tailwind UI Plus (where applicable).
     </div>
   )
 }

@@ -135,13 +135,7 @@ function Posts({ page, category }: { page: number; category?: string }) {
   )
 }
 
-function Pagination({
-  page,
-  category,
-}: {
-  page: number
-  category?: string
-}) {
+function Pagination({ page, category }: { page: number; category?: string }) {
   function url(page: number) {
     let params = new URLSearchParams()
 
@@ -198,13 +192,12 @@ function Pagination({
 }
 
 export default function News() {
-  const paramsPage = useSearchParams().get('page');
-  let page =
-    paramsPage
-      ? typeof paramsPage === 'string' && parseInt(paramsPage) > 1
-        ? parseInt(paramsPage)
-        : notFound()
-      : 1
+  const paramsPage = useSearchParams().get('page')
+  let page = paramsPage
+    ? typeof paramsPage === 'string' && parseInt(paramsPage) > 1
+      ? parseInt(paramsPage)
+      : notFound()
+    : 1
 
   return (
     <main className="overflow-hidden">

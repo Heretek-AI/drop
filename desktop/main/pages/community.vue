@@ -19,7 +19,5 @@
   </div>
 </template>
 <script setup lang="ts">
-import {
-  WrenchScrewdriverIcon,
-} from "@heroicons/vue/20/solid";
+import { WrenchScrewdriverIcon } from "@heroicons/vue/20/solid";
 </script>

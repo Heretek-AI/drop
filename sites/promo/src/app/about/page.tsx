@@ -125,7 +125,9 @@ function FrequentlyAskedQuestions() {
             </dd>
           </dl>
           <dl>
-            <dt className="text-sm font-semibold">How can I support Drop or get involved?</dt>
+            <dt className="text-sm font-semibold">
+              How can I support Drop or get involved?
+            </dt>
             <dd className="mt-4 text-sm/6 text-zinc-400">
               Thank you for helping us out! If you&apos;re looking to contribute
               code, check out our{' '}

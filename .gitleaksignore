@@ -1,0 +1,4 @@
+# Revoked Twitch OAuth token, committed in 405754ab and removed/revoked in
+# 2cf8b72c ("accidently commited secret from testing lol (revoked)").
+# History is not rewritten; this entry silences the dead credential.
+405754abd5e505ae4e57c72a27cb84267f6d57c2:server/server/internal/metadata/igdb.ts:generic-api-key:150

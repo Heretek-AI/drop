@@ -1121,16 +1121,24 @@ export class SteamProvider implements MetadataProvider {
     return markdown;
   }
 
-  private _stripHtmlTags(html: string): string {
-    // Strip tags, then decode entities EXCEPT the bracket ones (&lt;, &gt;),
-    // which are dropped outright. Legitimate markup was already converted to
-    // Markdown earlier in the pipeline, so there is no reason to keep angle
-    // brackets: never emitting '<' makes a tag opener like "<script"
-    // impossible by construction, and a single-pass decoder prevents crafted
-    // input like "&amp;lt;" from recombining into live entities.
-    return html
-      .replace(/<[^>]*>/g, "")
-      .replace(/&(?:nbsp|amp|quot|#39|#x[0-9A-Fa-f]+|#\d+);/gi, (entity) => {
+  private _stripHtmlTags(input: string): string {
+    // Remove every '<' character first — legitimate markup was already
+    // converted to Markdown earlier in the pipeline, so no tag openers are
+    // expected here. Removing the character itself (rather than matching
+    // whole tags) is complete by construction: with no '<' left in the
+    // string, a sequence like "<script" cannot exist.
+    let html = input;
+    while (html.includes("<")) {
+      html = html.replaceAll("<", "");
+    }
+
+    // Decode entities except &lt;/&gt;, which are dropped outright so angle
+    // brackets can never be resurrected. Single-pass replacement prevents
+    // crafted input like "&amp;lt;" from recombining into new entities.
+    // Numeric references encoding 0x3C/0x3E (&#60;, &#x3C;) are dropped too.
+    return html.replace(
+      /&(?:nbsp|amp|quot|#39|#x[0-9A-Fa-f]+|#\d+);/gi,
+      (entity) => {
         switch (entity.toLowerCase()) {
           case "&nbsp;":
             return " ";
@@ -1141,8 +1149,6 @@ export class SteamProvider implements MetadataProvider {
           case "&#39;":
             return "'";
           default: {
-            // Numeric references can encode angle brackets (&#60;, &#x3C;).
-            // Drop those outright so '<'/'>' can never be resurrected.
             const hex = entity.match(/&#x([0-9A-Fa-f]+);/i);
             if (hex) {
               const code = parseInt(hex[1]!, 16);
@@ -1158,6 +1164,7 @@ export class SteamProvider implements MetadataProvider {
             return entity;
           }
         }
-      });
+      },
+    );
   }
 }

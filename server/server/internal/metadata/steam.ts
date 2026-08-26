@@ -1122,14 +1122,42 @@ export class SteamProvider implements MetadataProvider {
   }
 
   private _stripHtmlTags(html: string): string {
-    // Strip tags first, then decode entities in a single pass. Decoding
-    // &amp; before other entities would let crafted input like
-    // "&amp;lt;script&amp;gt;" turn into live markup.
-    const text = this._decodeHtmlEntities(html.replace(/<[^>]*>/g, ""));
-    // Decoding can resurrect '<' characters (e.g. "&lt;script" above). Any
-    // legitimate markup was already converted to Markdown earlier in the
-    // pipeline, so remove every remaining '<' outright — this guarantees the
-    // result cannot contain a tag opener like "<script".
-    return text.replace(/</g, "");
+    // Strip tags, then decode entities EXCEPT the bracket ones (&lt;, &gt;),
+    // which are dropped outright. Legitimate markup was already converted to
+    // Markdown earlier in the pipeline, so there is no reason to keep angle
+    // brackets: never emitting '<' makes a tag opener like "<script"
+    // impossible by construction, and a single-pass decoder prevents crafted
+    // input like "&amp;lt;" from recombining into live entities.
+    return html
+      .replace(/<[^>]*>/g, "")
+      .replace(/&(?:nbsp|amp|quot|#39|#x[0-9A-Fa-f]+|#\d+);/gi, (entity) => {
+        switch (entity.toLowerCase()) {
+          case "&nbsp;":
+            return " ";
+          case "&amp;":
+            return "&";
+          case "&quot;":
+            return '"';
+          case "&#39;":
+            return "'";
+          default: {
+            // Numeric references can encode angle brackets (&#60;, &#x3C;).
+            // Drop those outright so '<'/'>' can never be resurrected.
+            const hex = entity.match(/&#x([0-9A-Fa-f]+);/i);
+            if (hex) {
+              const code = parseInt(hex[1]!, 16);
+              if (code === 0x3c || code === 0x3e) return "";
+              return String.fromCharCode(code);
+            }
+            const dec = entity.match(/&#(\d+);/);
+            if (dec) {
+              const code = parseInt(dec[1]!, 10);
+              if (code === 0x3c || code === 0x3e) return "";
+              return String.fromCharCode(code);
+            }
+            return entity;
+          }
+        }
+      });
   }
 }

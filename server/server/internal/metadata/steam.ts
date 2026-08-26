@@ -1125,14 +1125,11 @@ export class SteamProvider implements MetadataProvider {
     // Strip tags first, then decode entities in a single pass. Decoding
     // &amp; before other entities would let crafted input like
     // "&amp;lt;script&amp;gt;" turn into live markup.
-    let text = this._decodeHtmlEntities(html.replace(/<[^>]*>/g, ""));
-    // Decoding can resurrect tag-like sequences (e.g. "&lt;script" became
-    // "<script" above). Strip them again so the output never contains one.
-    while (/<(?:script|style|iframe|object|embed)[^>]*>/i.test(text)) {
-      const next = text.replace(/<[^>]*>/g, "");
-      if (next === text) break;
-      text = next;
-    }
-    return text;
+    const text = this._decodeHtmlEntities(html.replace(/<[^>]*>/g, ""));
+    // Decoding can resurrect '<' characters (e.g. "&lt;script" above). Any
+    // legitimate markup was already converted to Markdown earlier in the
+    // pipeline, so remove every remaining '<' outright — this guarantees the
+    // result cannot contain a tag opener like "<script".
+    return text.replace(/</g, "");
   }
 }

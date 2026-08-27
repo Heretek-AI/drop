@@ -178,6 +178,7 @@
                       v-slot="{ active }"
                     >
                       <button
+                        type="button"
                         :class="[
                           currentSort == option.param
                             ? 'font-medium text-zinc-100'

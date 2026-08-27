@@ -77,6 +77,7 @@ if (import.meta.client) {
             </i18n-t>
           </a>
           <button
+            type="button"
             v-else
             class="text-sm font-semibold leading-7 text-blue-600"
             @click="signIn"

@@ -198,6 +198,7 @@
           $t("library.admin.launchRow.emulatorSelect")
         }}</LoadingButton>
         <button
+          type="button"
           :disabled="!emulator"
           class="transition rounded p-2 bg-zinc-900/30 group hover:enabled:bg-red-600/10 text-zinc-400 hover:enabled:text-red-600 disabled:bg-zinc-900/80 disabled:text-zinc-700"
           @click="() => (emulator = undefined)"

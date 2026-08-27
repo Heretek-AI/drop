@@ -1,4 +1,4 @@
-import os from "os";
+import os from "node:os";
 
 export type SystemData = {
   totalRam: number;
@@ -36,7 +36,7 @@ function getCPUInfo() {
 
 class SystemManager {
   // userId to acl to listenerId
-  private listeners = new Map<
+  private readonly listeners = new Map<
     string,
     Map<string, { callback: (systemData: SystemData) => void }>
   >();

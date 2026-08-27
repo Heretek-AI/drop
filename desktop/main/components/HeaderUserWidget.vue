@@ -54,6 +54,7 @@
               v-slot="{ active, close }"
             >
               <button
+                type="button"
                 @click="() => navigate(close, nav)"
                 :href="nav.route"
                 :class="[

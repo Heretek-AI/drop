@@ -17,8 +17,8 @@
 import { type } from "arktype";
 import { parse as getMimeTypeBuffer } from "file-type-mime";
 import type pino from "pino";
-import type { Writable } from "stream";
-import { Readable } from "stream";
+import type { Writable } from "node:stream";
+import { Readable } from "node:stream";
 import { getMimeType as getMimeTypeStream } from "stream-mime-type";
 
 export type ObjectReference = string;
@@ -76,7 +76,7 @@ export abstract class ObjectBackend {
 }
 
 export class ObjectHandler {
-  private backend: ObjectBackend;
+  private readonly backend: ObjectBackend;
 
   constructor(backend: ObjectBackend) {
     this.backend = backend;

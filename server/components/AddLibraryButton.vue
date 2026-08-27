@@ -53,6 +53,7 @@
                 v-slot="{ active }"
               >
                 <button
+                  type="button"
                   :class="[
                     active ? 'bg-zinc-700/90' : '',
                     'group flex w-full items-center justify-between rounded-md px-3 py-2 text-sm text-zinc-200',

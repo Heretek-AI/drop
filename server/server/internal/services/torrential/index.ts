@@ -1,9 +1,9 @@
-import { spawn } from "child_process";
+import { spawn } from "node:child_process";
 import { Service } from "..";
-import fs from "fs";
+import fs from "node:fs";
 import { logger } from "../../logging";
-import type { Socket } from "net";
-import net from "net";
+import type { Socket } from "node:net";
+import net from "node:net";
 import { create, toBinary, type Message } from "@bufbuild/protobuf";
 import { fromBinary } from "@bufbuild/protobuf";
 import { StringValueSchema } from "@bufbuild/protobuf/wkt";
@@ -40,7 +40,7 @@ export class TorrentialService extends Service<unknown> {
   private readbuf: Buffer<ArrayBufferLike> = Buffer.alloc(0);
   private readingQueue = false;
 
-  private queryProcessors: Map<
+  private readonly queryProcessors: Map<
     DropBoundType,
     QueryProcessor<DropBoundType, TorrentialBoundType, Message>
   > = new Map();

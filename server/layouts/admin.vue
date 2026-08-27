@@ -57,10 +57,7 @@
                   <DropWordmark class="h-full w-auto" alt="Drop`" />
                 </div>
                 <nav>
-                  <ul
-                    role="list"
-                    class="grid grid-cols-2 items-stretch gap-4 px-5"
-                  >
+                  <ul class="grid grid-cols-2 items-stretch gap-4 px-5">
                     <li v-for="(item, itemIdx) in navigation" :key="item.route">
                       <NuxtLink
                         :href="item.route"
@@ -102,7 +99,7 @@
         >
       </div>
       <nav class="mt-8">
-        <ul role="list" class="flex flex-col items-stretch space-y-4 mx-2">
+        <ul class="flex flex-col items-stretch space-y-4 mx-2">
           <li v-for="(item, itemIdx) in navigation" :key="item.route">
             <NuxtLink
               :href="item.route"

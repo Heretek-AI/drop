@@ -34,6 +34,7 @@
           />
         </div>
         <button
+          type="button"
           class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500"
           @click="saveDetails"
         >
@@ -75,6 +76,7 @@
           </span>
           <button
             v-if="!oidcEnabled"
+            type="button"
             class="text-sm text-red-400 hover:text-red-300"
             @click="removeMember(member.id)"
           >
@@ -103,6 +105,7 @@
           <!-- eslint-enable @intlify/vue-i18n/no-raw-text -->
         </select>
         <button
+          type="button"
           class="rounded-md bg-blue-600 px-2 py-1 text-sm font-semibold text-white hover:bg-blue-500"
           :disabled="!selectedUserId"
           @click="addMember"

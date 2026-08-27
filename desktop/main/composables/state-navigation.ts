@@ -1,7 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { data } from "autoprefixer";
-import { AppStatus, type AppState } from "~/types";
+import { AppStatus } from "~/types";
 
 export function setupHooks() {
   const router = useRouter();

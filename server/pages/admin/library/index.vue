@@ -228,6 +228,7 @@
                     v-slot="{ active }"
                   >
                     <button
+                      type="button"
                       :class="[
                         currentSort == option.param
                           ? 'font-medium text-zinc-100'
@@ -255,7 +256,6 @@
       </div>
     </Disclosure>
     <ul
-      role="list"
       class="relative grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
     >
       <li
@@ -341,6 +341,7 @@
                 </i18n-t>
               </NuxtLink>
               <button
+                type="button"
                 class="w-fit rounded-md bg-red-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-red-500 hover:scale-105 hover:shadow-lg hover:shadow-red-500/25 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                 @click="() => deleteGame(game.id)"
               >
@@ -484,6 +485,7 @@
     >
       <div class="-mt-px flex w-0 flex-1">
         <button
+          type="button"
           class="group inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-zinc-400 disabled:text-zinc-700 hover:not-disabled:border-white/20 hover:not-disabled:text-zinc-200"
           :disabled="currentIndex == 0"
           @click="previousPage"
@@ -499,6 +501,7 @@
         <button
           v-for="page in maxPages"
           :key="page"
+          type="button"
           :class="[
             currentIndex == page - 1
               ? 'border-blue-400 text-blue-400'
@@ -512,6 +515,7 @@
       </div>
       <div class="-mt-px flex w-0 flex-1 justify-end">
         <button
+          type="button"
           class="group inline-flex items-center border-t-2 border-transparent pt-4 pl-1 text-sm font-medium text-zinc-400 disabled:text-zinc-700 hover:not-disabled:border-white/20 hover:not-disabled:text-zinc-200"
           :disabled="currentIndex == maxPages - 1"
           @click="nextPage"

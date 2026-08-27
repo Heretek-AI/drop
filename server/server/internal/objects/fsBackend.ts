@@ -1,10 +1,10 @@
 import type { ObjectMetadata, ObjectReference, Source } from "./objectHandler";
 import { ObjectBackend, objectMetadata } from "./objectHandler";
 
-import fs from "fs";
-import path from "path";
-import { Readable } from "stream";
-import { createHash } from "crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { Readable } from "node:stream";
+import { createHash } from "node:crypto";
 import prisma from "../db/database";
 import cacheHandler from "../cache";
 import { systemConfig } from "../config/sys-conf";
@@ -13,11 +13,11 @@ import { logger } from "~/server/internal/logging";
 import type pino from "pino";
 
 export class FsObjectBackend extends ObjectBackend {
-  private baseObjectPath: string;
-  private baseMetadataPath: string;
+  private readonly baseObjectPath: string;
+  private readonly baseMetadataPath: string;
 
-  private hashStore = new FsHashStore();
-  private metadataCache =
+  private readonly hashStore = new FsHashStore();
+  private readonly metadataCache =
     cacheHandler.createCache<ObjectMetadata>("ObjectMetadata");
 
   constructor() {
@@ -271,7 +271,7 @@ export class FsObjectBackend extends ObjectBackend {
 }
 
 class FsHashStore {
-  private cache = cacheHandler.createCache<string>("ObjectHashStore");
+  private readonly cache = cacheHandler.createCache<string>("ObjectHashStore");
 
   /**
    * Gets hash of object

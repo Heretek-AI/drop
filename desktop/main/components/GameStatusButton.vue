@@ -48,6 +48,7 @@
           <div class="py-1">
             <MenuItem v-slot="{ active }">
               <button
+                type="button"
                 @click="() => emit('install')"
                 :class="[
                   active
@@ -63,6 +64,7 @@
 
             <MenuItem v-if="showOptions" v-slot="{ active }">
               <button
+                type="button"
                 @click="() => emit('options')"
                 :class="[
                   active
@@ -77,6 +79,7 @@
             </MenuItem>
             <MenuItem v-slot="{ active }">
               <button
+                type="button"
                 @click="() => emit('uninstall')"
                 :class="[
                   active
@@ -115,7 +118,6 @@ import {
 } from "~/types.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { Cog6ToothIcon, TrashIcon } from "@heroicons/vue/24/outline";
-import { ArrowsRightLeftIcon, ArrowUpTrayIcon } from "@heroicons/vue/24/solid";
 
 const props = defineProps<{ status: GameStatus }>();
 const emit = defineEmits<{

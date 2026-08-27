@@ -5,7 +5,7 @@
  * It also provides the endpoints with information about unmatched games
  */
 
-import path from "path";
+import path from "node:path";
 import prisma from "../db/database";
 import { fuzzy } from "fast-fuzzy";
 import type { TaskRunContext } from "../tasks";
@@ -63,8 +63,8 @@ export interface UnimportedVersionInformation {
 }
 
 class LibraryManager {
-  private libraries: Map<string, LibraryProvider<unknown>> = new Map();
-  private shescape = new Shescape({});
+  private readonly libraries: Map<string, LibraryProvider<unknown>> = new Map();
+  private readonly shescape = new Shescape({});
 
   addLibrary(library: LibraryProvider<unknown>) {
     this.libraries.set(library.id(), library);

@@ -19,7 +19,7 @@
               {{ $t("setup.welcomeDescription") }}
             </p>
           </div>
-          <ul role="list" class="mt-10 divide-y divide-zinc-700/5">
+          <ul class="mt-10 divide-y divide-zinc-700/5">
             <li
               v-for="(action, actionIdx) in actions"
               :key="action.name"
@@ -39,6 +39,7 @@
               <div class="flex-auto">
                 <h3 class="text-sm/6 font-semibold text-zinc-100">
                   <button
+                    type="button"
                     :class="
                       actionsComplete[actionIdx]
                         ? 'line-through text-zinc-300'

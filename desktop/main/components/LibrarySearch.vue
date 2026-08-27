@@ -20,6 +20,7 @@
         />
       </div>
       <button
+        type="button"
         @click="() => calculateGames(true, true)"
         class="p-1 flex items-center justify-center transition-transform duration-300 size-10 hover:scale-110 active:scale-90 rounded-lg bg-zinc-800/50 text-zinc-100"
       >
@@ -142,7 +143,6 @@ import {
   ArrowPathIcon,
   MagnifyingGlassIcon,
   MinusIcon,
-  PlusIcon,
 } from "@heroicons/vue/20/solid";
 import { invoke } from "@tauri-apps/api/core";
 import {

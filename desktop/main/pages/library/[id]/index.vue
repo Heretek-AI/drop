@@ -139,6 +139,7 @@
                     >
                       <div class="pointer-events-auto">
                         <button
+                          type="button"
                           v-if="game.mImageCarouselObjectIds.length > 1"
                           @click.stop="previousImage()"
                           class="p-2 rounded-full bg-zinc-900/50 text-zinc-100 hover:bg-zinc-900/80 transition-all duration-300 hover:scale-110"
@@ -148,6 +149,7 @@
                       </div>
                       <div class="pointer-events-auto">
                         <button
+                          type="button"
                           v-if="game.mImageCarouselObjectIds.length > 1"
                           @click.stop="nextImage()"
                           class="p-2 rounded-full bg-zinc-900/50 text-zinc-100 hover:bg-zinc-900/80 transition-all duration-300 hover:scale-110"
@@ -172,6 +174,7 @@
                     class="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-x-2"
                   >
                     <button
+                      type="button"
                       v-for="(_, index) in game.mImageCarouselObjectIds"
                       :key="index"
                       @click.stop="currentImageIndex = index"
@@ -423,7 +426,7 @@
               to automatically queue for download.
             </p>
           </div>
-          <ul role="list" class="mt-2 divide-y divide-white/5">
+          <ul class="mt-2 divide-y divide-white/5">
             <li
               v-for="content in currentVersionOption.requiredContent"
               :key="content.versionId"
@@ -443,6 +446,7 @@
                 <div class="min-w-0 flex-auto">
                   <p class="text-sm/6 font-semibold text-white">
                     <button
+                      type="button"
                       @click="
                         () =>
                           (installDepsDisabled[content.versionId] =
@@ -536,6 +540,7 @@
       <ol class="space-y-2">
         <li v-for="(launchData, launchIdx) in launchOptions!">
           <button
+            type="button"
             class="transition w-full rounded-sm bg-zinc-800 inline-flex items-center text-sm py-2 px-3 gap-x-2 text-zinc-100 hover:text-zinc-300 hover:bg-zinc-700"
             @click="() => launchIndex(launchIdx)"
           >
@@ -594,6 +599,7 @@
         @click.stop
       >
         <button
+          type="button"
           class="absolute top-4 right-4 p-2 rounded-full bg-zinc-900/50 text-zinc-100 hover:bg-zinc-900 transition-colors"
           @click.stop="fullscreenImage = null"
         >
@@ -601,6 +607,7 @@
         </button>
 
         <button
+          type="button"
           v-if="game.mImageCarouselObjectIds.length > 1"
           @click.stop="previousImage()"
           class="absolute left-4 p-3 rounded-full bg-zinc-900/50 text-zinc-100 hover:bg-zinc-900 transition-colors"
@@ -608,6 +615,7 @@
           <ChevronLeftIcon class="size-6" />
         </button>
         <button
+          type="button"
           v-if="game.mImageCarouselObjectIds.length > 1"
           @click.stop="nextImage()"
           class="absolute right-4 p-3 rounded-full bg-zinc-900/50 text-zinc-100 hover:bg-zinc-900 transition-colors"
@@ -660,7 +668,6 @@ import {
 import {
   CheckIcon,
   ChevronUpDownIcon,
-  WrenchIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   XMarkIcon,
@@ -673,7 +680,6 @@ import { BuildingStorefrontIcon } from "@heroicons/vue/24/outline";
 import {
   ArrowDownTrayIcon,
   CheckCircleIcon,
-  MapPinIcon,
   MinusIcon,
   ServerIcon,
   XCircleIcon,

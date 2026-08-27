@@ -35,6 +35,7 @@
             </div>
             <span class="inline-flex gap-x-8 items-center" v-else>
               <button
+                type="button"
                 @click="() => authWrapper_wrapper()"
                 :disabled="loading"
                 class="px-3 py-1 inline-flex items-center gap-x-2 bg-zinc-700 rounded text-sm text-left font-semibold leading-7 text-white"

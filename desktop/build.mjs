@@ -1,6 +1,6 @@
-import fs from "fs";
+import fs from "node:fs";
 import process from "process";
-import childProcess from "child_process";
+import childProcess from "node:child_process";
 import createLogger from "pino";
 
 const OUTPUT = "./.output";

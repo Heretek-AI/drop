@@ -86,14 +86,11 @@ import { invoke } from "@tauri-apps/api/core";
 import { platform, type } from "@tauri-apps/plugin-os";
 import {
   FingerPrintIcon,
-  TagIcon,
   ComputerDesktopIcon,
   ServerIcon,
   FolderIcon,
-  CubeIcon,
   DocumentTextIcon,
 } from "@heroicons/vue/24/outline";
-import { open } from "@tauri-apps/plugin-shell";
 
 const clientId = ref<string | null>(null);
 const platformInfo = ref("Loading...");

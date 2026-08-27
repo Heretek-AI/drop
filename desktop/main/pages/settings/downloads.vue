@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <ul role="list" class="divide-y divide-gray-800">
+    <ul class="divide-y divide-gray-800">
       <li
         v-for="(dir, dirIdx) in dirs"
         :key="dir"
@@ -50,6 +50,7 @@
         </div>
         <div class="flex shrink-0 items-center gap-x-6">
           <button
+            type="button"
             @click="() => deleteDirectory(dirIdx)"
             :disabled="dirs.length <= 1"
             :class="[
@@ -182,6 +183,7 @@
                     >
                     <div class="mt-2">
                       <button
+                        type="button"
                         @click="() => selectDirectory()"
                         class="block text-left w-full rounded-md border-0 px-3 py-1.5 text-zinc-100 shadow-sm ring-1 ring-inset ring-zinc-700 bg-zinc-800 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm/6"
                       >

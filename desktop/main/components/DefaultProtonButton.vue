@@ -19,6 +19,7 @@ async function setDefault() {
 
 <template>
   <button
+    type="button"
     :class="['p-0.5 rounded-full', isDefault ? 'bg-blue-500' : 'bg-zinc-800']"
     @click="setDefault"
     :disabled="!props.path"

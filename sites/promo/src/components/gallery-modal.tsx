@@ -134,6 +134,7 @@ export default function GalleryModal({
           >
             <img src={img} alt="" className="max-h-[90vh] w-full" />
             <button
+              type="button"
               className="absolute top-0 right-0 m-4 cursor-pointer rounded-xl bg-zinc-900 p-2 text-zinc-100 outline outline-zinc-700 hover:text-zinc-400"
               onClick={close}
             >

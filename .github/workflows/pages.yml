@@ -48,7 +48,7 @@ jobs:
       # dependencies so the public website deploy stays decoupled from the
       # server/desktop build pipelines.
       - name: Install dependencies
-        run: pnpm install --filter radiant... --filter docs-next...
+        run: pnpm install --filter radiant... --filter docs-next... --ignore-scripts
 
       - name: Setup Pages
         id: setup_pages

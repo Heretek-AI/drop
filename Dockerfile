@@ -27,8 +27,8 @@ FROM rustlang/rust:nightly-bookworm-slim AS torrential-build
 ## libarchive-dev + pkg-config let libarchive3-sys link libarchive dynamically (glibc).
 ## protobuf-compiler is kept for parity (torrential's build.rs uses a vendored protoc).
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    pkg-config \
     libarchive-dev \
+    pkg-config \
     protobuf-compiler \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /build
@@ -79,13 +79,13 @@ RUN rm -rf /app/torrential
 ##  - openssl + ca-certificates: required by Prisma's query engine on Debian
 ## pnpm itself is provided by corepack (enabled in the base stage)
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     libarchive13 \
-    p7zip-full \
     nginx \
     openssl \
-    ca-certificates \
+    p7zip-full \
     && rm -rf /var/lib/apt/lists/*
-RUN pnpm install prisma@7.7.0 --global
+RUN pnpm install prisma@7.7.0 --global --ignore-scripts
 # init prisma to download all required files
 RUN pnpm prisma init
 

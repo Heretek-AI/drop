@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: 'Thanking the people who contribute financially to the project.',
 }
 
-function CTA() {
+function Cta() {
   return (
     <Container className="py-32">
       <Subheading>Contribute</Subheading>
@@ -61,7 +61,7 @@ export default function About() {
       </Container>
 
       <Sponsors />
-      <CTA />
+      <Cta />
 
       <Footer />
     </main>

@@ -38,7 +38,7 @@ export function Button({
 }: ButtonProps) {
   className = clsx(className, variants[variant])
 
-  if (typeof props.href === 'undefined') {
+  if (props.href === undefined) {
     return <Headless.Button {...props} className={className} />
   }
 

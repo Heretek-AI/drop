@@ -15,6 +15,7 @@
         <input
           type="text"
           v-model="searchQuery"
+          aria-label="Search library"
           class="block w-full rounded-lg border-0 bg-zinc-800/50 py-2 pl-10 pr-3 text-zinc-100 placeholder:text-zinc-500 focus:bg-zinc-800 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6"
           placeholder="Search library..."
         />
@@ -114,7 +115,7 @@
       v-if="loading"
       class="h-full grow flex p-8 justify-center text-zinc-100"
     >
-      <div role="status">
+      <output>
         <svg
           aria-hidden="true"
           class="w-6 h-6 text-transparent animate-spin fill-zinc-600"
@@ -132,7 +133,7 @@
           />
         </svg>
         <span class="sr-only">Loading...</span>
-      </div>
+      </output>
     </div>
   </div>
 </template>
@@ -148,7 +149,7 @@ import { invoke } from "@tauri-apps/api/core";
 import {
   type EmptyGameStatusEnum,
   InstalledType,
-  type Collection as Collection,
+  type Collection,
   type Game,
   type GameStatus,
 } from "~/types";
@@ -186,9 +187,9 @@ function getGameStatusStyleText(status: GameStatus): [string, string] {
     if (status.install_type.type === InstalledType.SetupRequired) {
       return ["text-yellow-500", "Setup required"];
     }
-    throw (
+    throw new Error(
       "Non-exhaustive installed type, missing: " +
-      JSON.stringify(status.install_type)
+        JSON.stringify(status.install_type),
     );
   }
   return [gameStatusTextStyle[status.type], gameStatusText[status.type]];

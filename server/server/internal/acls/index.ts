@@ -199,7 +199,6 @@ class ACLManager {
         where: { id: userSession.authenticated.userId },
       });
       if (user) {
-        if (!user) return false;
         if (!user.admin) return false;
         if (
           userSession.authenticated.level <

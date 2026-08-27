@@ -187,6 +187,7 @@
           v-model="searchQuery"
           type="text"
           name="search"
+          :aria-label="$t('library.search')"
           class="col-start-1 row-start-1 block w-full rounded-md bg-zinc-900 py-1.5 pl-10 pr-3 text-base text-zinc-100 border-[0px] outline-[0px] placeholder:text-zinc-400 sm:pl-9 sm:text-sm/6"
           :placeholder="$t('library.search')"
         />
@@ -459,7 +460,7 @@
         v-if="gamesLoading"
         class="absolute inset-0 bg-zinc-900/50 flex items-start p-4 justify-center"
       >
-        <div role="status">
+        <output>
           <svg
             aria-hidden="true"
             class="size-8 text-transparent animate-spin fill-white"
@@ -477,7 +478,7 @@
             />
           </svg>
           <span class="sr-only">{{ $t("common.srLoading") }}</span>
-        </div>
+        </output>
       </div>
     </ul>
     <nav

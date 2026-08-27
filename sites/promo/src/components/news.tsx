@@ -199,11 +199,16 @@ function Pagination({
 
 export default function News() {
   const paramsPage = useSearchParams().get('page')
-  let page = paramsPage
-    ? typeof paramsPage === 'string' && parseInt(paramsPage) > 1
-      ? parseInt(paramsPage)
-      : notFound()
-    : 1
+  let page = 1
+  if (
+    paramsPage &&
+    typeof paramsPage === 'string' &&
+    parseInt(paramsPage) > 1
+  ) {
+    page = parseInt(paramsPage)
+  } else if (paramsPage) {
+    notFound()
+  }
 
   return (
     <main className="overflow-hidden">

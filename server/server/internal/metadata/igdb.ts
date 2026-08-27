@@ -25,8 +25,6 @@ import type { TaskRunContext } from "../tasks";
 import { logger } from "~/server/internal/logging";
 import type { NitroFetchOptions, NitroFetchRequest } from "nitropack";
 
-type IGDBID = number;
-
 interface TwitchAuthResponse {
   access_token: string;
   expires_in: number;
@@ -40,7 +38,7 @@ interface IGDBErrorResponse {
 }
 
 interface IGDBItem {
-  id: IGDBID;
+  id: number;
 }
 
 interface IGDBGenre extends IGDBItem {
@@ -51,8 +49,8 @@ interface IGDBGenre extends IGDBItem {
 
 // denotes role a company had in a game
 interface IGDBInvolvedCompany extends IGDBItem {
-  company: IGDBID;
-  game: IGDBID;
+  company: number;
+  game: number;
 
   developer: boolean;
   porting: boolean;
@@ -67,12 +65,12 @@ interface IGDBCompany extends IGDBItem {
   name: string;
   country: number; // ISO 3166-1 country code
   description: string;
-  logo: IGDBID;
-  parent: IGDBID;
+  logo: number;
+  parent: number;
   slug: string;
   start_date: number;
-  status: IGDBID;
-  websites: IGDBID[];
+  status: number;
+  websites: number[];
 }
 
 interface IGDBCompanyWebsite extends IGDBItem {
@@ -86,7 +84,7 @@ interface IGDBCover extends IGDBItem {
 
 interface IGDBSearchStub extends IGDBItem {
   name: string;
-  cover?: IGDBID;
+  cover?: number;
   first_release_date?: number; // unix timestamp
   summary: string;
 }
@@ -156,56 +154,56 @@ const IGDB_RATING_TO_STRING: Record<number, string> = {
 
 // https://api-docs.igdb.com/?shell#game
 interface IGDBGameFull extends IGDBSearchStub {
-  age_ratings?: IGDBID[];
+  age_ratings?: number[];
   aggregated_rating?: number;
   aggregated_rating_count?: number;
-  alternative_names?: IGDBID[];
-  artworks?: IGDBID[];
-  bundles?: IGDBID[];
+  alternative_names?: number[];
+  artworks?: number[];
+  bundles?: number[];
   checksum?: string;
-  collections?: IGDBID[];
+  collections?: number[];
   created_at: number; // unix timestamp
-  dlcs?: IGDBID[];
-  expanded_games?: IGDBID[];
-  expansions?: IGDBID[];
-  external_games?: IGDBID[];
-  forks?: IGDBID[];
-  franchise?: IGDBID;
-  franchises?: IGDBID[];
-  game_engines?: IGDBID[];
-  game_localizations?: IGDBID[];
-  game_modes?: IGDBID[];
-  game_status?: IGDBID;
-  game_type?: IGDBID;
-  genres?: IGDBID[];
+  dlcs?: number[];
+  expanded_games?: number[];
+  expansions?: number[];
+  external_games?: number[];
+  forks?: number[];
+  franchise?: number;
+  franchises?: number[];
+  game_engines?: number[];
+  game_localizations?: number[];
+  game_modes?: number[];
+  game_status?: number;
+  game_type?: number;
+  genres?: number[];
   hypes?: number;
-  involved_companies?: IGDBID[];
-  keywords?: IGDBID[];
-  language_supports?: IGDBID[];
-  multiplayer_modes?: IGDBID[];
-  platforms?: IGDBID[];
-  player_perspectives?: IGDBID[];
-  ports?: IGDBID[];
+  involved_companies?: number[];
+  keywords?: number[];
+  language_supports?: number[];
+  multiplayer_modes?: number[];
+  platforms?: number[];
+  player_perspectives?: number[];
+  ports?: number[];
   rating?: number;
   rating_count?: number;
-  release_dates?: IGDBID[];
-  remakes?: IGDBID[];
-  remasters?: IGDBID[];
-  screenshots?: IGDBID[];
-  similar_games?: IGDBID[];
+  release_dates?: number[];
+  remakes?: number[];
+  remasters?: number[];
+  screenshots?: number[];
+  similar_games?: number[];
   slug: string;
-  standalone_expansions?: IGDBID[];
+  standalone_expansions?: number[];
   storyline?: string;
-  tags?: IGDBID[];
-  themes?: IGDBID[];
+  tags?: number[];
+  themes?: number[];
   total_rating?: number;
   total_rating_count?: number;
   updated_at: number;
   url: string;
-  version_parent?: IGDBID;
+  version_parent?: number;
   version_title?: string;
-  videos?: IGDBID[];
-  websites?: IGDBID[];
+  videos?: number[];
+  websites?: number[];
 }
 
 // Api Docs: https://api-docs.igdb.com/
@@ -293,17 +291,17 @@ export class IGDBProvider implements MetadataProvider {
         "content-type": "text/plain",
       },
     };
-    const response = await $fetch<T[] | IGDBErrorResponse[]>(
-      finalURL,
-      Object.assign({}, options, overlay),
-    );
+    const response = await $fetch<T[] | IGDBErrorResponse[]>(finalURL, {
+      ...options,
+      ...overlay,
+    });
 
     // should not have an error object if the status code is 200
     return <T[]>response;
   }
 
   private async _getMediaInternal(
-    mediaID: IGDBID,
+    mediaID: number,
     type: string,
     size: string = "t_thumb",
   ) {
@@ -325,23 +323,23 @@ export class IGDBProvider implements MetadataProvider {
     return result;
   }
 
-  private async getCoverURL(id: IGDBID) {
+  private async getCoverURL(id: number) {
     return await this._getMediaInternal(id, "covers", "t_cover_big");
   }
 
-  private async getArtworkURL(id: IGDBID) {
+  private async getArtworkURL(id: number) {
     return await this._getMediaInternal(id, "artworks", "t_1080p");
   }
 
-  private async getScreenshotURL(id: IGDBID) {
+  private async getScreenshotURL(id: number) {
     return await this._getMediaInternal(id, "screenshots", "t_1080p");
   }
 
-  private async getIconURL(id: IGDBID) {
+  private async getIconURL(id: number) {
     return await this._getMediaInternal(id, "covers", "t_thumb");
   }
 
-  private async getCompanyLogoURl(id: IGDBID) {
+  private async getCompanyLogoURl(id: number) {
     return await this._getMediaInternal(id, "company_logos", "t_original");
   }
 
@@ -349,7 +347,7 @@ export class IGDBProvider implements MetadataProvider {
     return msg.length > len ? msg.substring(0, 280) + "..." : msg;
   }
 
-  private async _getGenreInternal(genreID: IGDBID) {
+  private async _getGenreInternal(genreID: number) {
     if (genreID === undefined) throw new Error(`IGDB genreID was undefined`);
 
     const body = `where id = ${genreID}; fields slug,name,url;`;
@@ -364,7 +362,7 @@ export class IGDBProvider implements MetadataProvider {
     return result;
   }
 
-  private async getGenres(genres: IGDBID[] | undefined): Promise<string[]> {
+  private async getGenres(genres: number[] | undefined): Promise<string[]> {
     if (genres === undefined) return [];
 
     const results: string[] = [];
@@ -376,7 +374,7 @@ export class IGDBProvider implements MetadataProvider {
   }
 
   private async getAgeRatings(
-    ageRatingIds: IGDBID[] | undefined,
+    ageRatingIds: number[] | undefined,
   ): Promise<GameMetadataAgeRating[]> {
     if (!ageRatingIds?.length) return [];
 
@@ -415,21 +413,21 @@ export class IGDBProvider implements MetadataProvider {
     const response = await this.request<IGDBSearchStub>("games", body);
 
     const results: GameMetadataSearchResult[] = [];
-    for (let i = 0; i < response.length; i++) {
+    for (const game of response) {
       let icon: string;
-      const cover = response[i].cover;
+      const cover = game.cover;
       if (cover !== undefined) {
         icon = await this.getIconURL(cover);
       } else {
         icon = "";
       }
 
-      const firstReleaseDate = response[i].first_release_date;
+      const firstReleaseDate = game.first_release_date;
       results.push({
-        id: "" + response[i].id,
-        name: response[i].name,
+        id: "" + game.id,
+        name: game.name,
         icon,
-        description: response[i].summary,
+        description: game.summary,
         year:
           firstReleaseDate === undefined
             ? 0

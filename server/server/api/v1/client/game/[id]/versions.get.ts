@@ -8,8 +8,8 @@ import gameSizeManager from "~/server/internal/gamesize";
 type VersionDownloadOption = {
   gameId: string;
   versionId: string;
-  displayName?: string | undefined;
-  versionPath?: string | undefined;
+  displayName?: string;
+  versionPath?: string;
   platform: Platform;
   size: GameVersionSize;
   requiredContent: Array<{

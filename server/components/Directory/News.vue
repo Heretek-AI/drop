@@ -47,9 +47,9 @@
 
       <!-- Tags -->
       <div>
-        <label class="block text-sm font-medium text-zinc-400 mb-2">
+        <p class="block text-sm font-medium text-zinc-400 mb-2">
           {{ $t("common.tags") }}
-        </label>
+        </p>
         <div class="flex flex-wrap gap-2">
           <button
             v-for="tag in availableTags"
@@ -91,6 +91,8 @@
             <img
               :src="useObject(article.imageObjectId)"
               class="absolute blur-sm inset-0 w-full h-full object-cover transition-all duration-200 group-hover:scale-110"
+              alt=""
+              aria-hidden="true"
             />
             <div class="absolute inset-0 bg-zinc-900/50" />
           </div>
@@ -191,11 +193,9 @@ const filteredArticles = computed(() => {
       }
     }
 
-    const matchesTags =
-      selectedTags.value.length === 0 ||
-      selectedTags.value.every((tag) =>
-        article.tags.find((e) => e.name == tag),
-      );
+    const matchesTags = selectedTags.value.every((tag) =>
+      article.tags.find((e) => e.name == tag),
+    );
 
     return matchesSearch && matchesDate && matchesTags;
   });

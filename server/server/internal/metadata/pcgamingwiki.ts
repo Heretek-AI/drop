@@ -337,7 +337,7 @@ export class PCGamingWikiProvider implements MetadataProvider {
     if (websiteStr === undefined || websiteStr === null) return "";
 
     // string comes in format: "[https://www.gamesci.com.cn www.gamesci.com.cn]"
-    return websiteStr.replaceAll(/\[|]/g, "").split(" ")[0] ?? "";
+    return websiteStr.replaceAll(/[[\]]/g, "").split(" ")[0] ?? "";
   }
 
   private compileTags(game: PCGamingWikiGame): string[] {
@@ -444,7 +444,7 @@ export class PCGamingWikiProvider implements MetadataProvider {
 
       tags: this.compileTags(game),
 
-      reviews: pageContent.reception.filter((v) => typeof v !== "undefined"),
+      reviews: pageContent.reception.filter((v) => v !== undefined),
       ageRatings: [],
       publishers,
       developers,
@@ -479,8 +479,8 @@ export class PCGamingWikiProvider implements MetadataProvider {
     // TODO: replace with company logo
     const icon = createObject(jdenticon.toPng(query, 512));
 
-    for (let i = 0; i < res.cargoquery.length; i++) {
-      const company = res.cargoquery[i].title;
+    for (const item of res.cargoquery) {
+      const company = item.title;
 
       const fixedCompanyName =
         this.parseWikiStringArray(company.PageName)[0] ?? company.PageName;

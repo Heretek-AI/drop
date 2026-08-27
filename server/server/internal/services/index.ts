@@ -126,7 +126,7 @@ export class Service<T> {
         try {
           const hasSetup = await this.setup();
           if (hasSetup) break;
-          throw "setup function returned false...";
+          throw new Error("setup function returned false...");
         } catch (e) {
           this.logger.warn(`failed setup, trying again... | ${e}`);
           await new Promise((r) => setTimeout(r, 7000));

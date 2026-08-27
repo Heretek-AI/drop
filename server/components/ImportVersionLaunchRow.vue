@@ -9,6 +9,7 @@
           v-model="launchConfiguration.name"
           type="text"
           name="startup"
+          aria-label="Launch name"
           class="block flex-1 border-0 py-1.5 px-3 bg-transparent text-zinc-100 placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
           placeholder="Launch name"
         />
@@ -90,6 +91,8 @@
                       v-if="guess.type === 'emulator'"
                       :src="useObject(guess.icon)"
                       class="size-5"
+                      alt=""
+                      aria-hidden="true"
                     />
                   </span>
 

@@ -265,20 +265,28 @@
         </h2>
         <div class="space-y-4">
           <div>
-            <label class="text-sm/6 font-medium text-zinc-100">
+            <label
+              for="new-group-name"
+              class="text-sm/6 font-medium text-zinc-100"
+            >
               {{ $t("users.admin.groups.name") }}
             </label>
             <input
+              id="new-group-name"
               v-model="newGroupName"
               type="text"
               class="mt-1 block w-full rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
             />
           </div>
           <div>
-            <label class="text-sm/6 font-medium text-zinc-100">
+            <label
+              for="new-group-description"
+              class="text-sm/6 font-medium text-zinc-100"
+            >
               {{ $t("users.admin.groups.descriptionField") }}
             </label>
             <input
+              id="new-group-description"
               v-model="newGroupDescription"
               type="text"
               class="mt-1 block w-full rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"

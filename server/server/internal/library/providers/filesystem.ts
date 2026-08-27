@@ -32,7 +32,7 @@ export class FilesystemProvider implements LibraryProvider<
     this.config = config;
 
     if (!fs.existsSync(this.config.baseDir))
-      throw "Base directory does not exist.";
+      throw new Error("Base directory does not exist.");
   }
 
   id(): string {

@@ -444,12 +444,11 @@ class LibraryManager {
           statusCode: 400,
           message: 'Setup required in "setup mode".',
         });
-    } else {
-      if (metadata.launches.length == 0)
-        throw createError({
-          statusCode: 400,
-          message: "Launch executable is required.",
-        });
+    } else if (metadata.launches.length == 0) {
+      throw createError({
+        statusCode: 400,
+        message: "Launch executable is required.",
+      });
     }
 
     const game = await prisma.game.findUnique({
@@ -510,7 +509,9 @@ class LibraryManager {
             fileList = unimportedVersion.fileList;
             progress(90);
           } else {
-            throw "Could not find or create manifest for this version.";
+            throw new Error(
+              "Could not find or create manifest for this version.",
+            );
           }
 
           const largestIndex = await prisma.gameVersion.findFirst({

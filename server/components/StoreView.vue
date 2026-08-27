@@ -449,7 +449,7 @@ const filterQuery = computed(() => {
     .filter(
       ([_, v]) =>
         v &&
-        (typeof v !== "object" || Object.values(v).filter((e) => e).length > 0),
+        (typeof v !== "object" || Object.values(v).filter(Boolean).length > 0),
     )
     .map(([n, v]) => {
       if (typeof v === "string") return [`${n}=${v}`];
@@ -463,7 +463,8 @@ const filterQuery = computed(() => {
         .map(([k, v]) => `${k}=${v}`)
         .join("&")
     : props.params;
-  return `${query}${extraFilters ? (query ? "&" : "") + extraFilters : ""}`;
+  const separator = query && extraFilters ? "&" : "";
+  return `${query}${extraFilters ? separator + extraFilters : ""}`;
 });
 
 const games = ref<Array<SerializeObject<GameModel>>>();

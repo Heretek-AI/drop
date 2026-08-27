@@ -15,7 +15,8 @@ export default defineEventHandler((h3) => {
   if (!enabledAuthManagers.OpenID)
     return sendRedirect(
       h3,
-      `/auth/signin${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`,
+      "/auth/signin" +
+        (redirect ? "?redirect=" + encodeURIComponent(redirect) : ""),
     );
 
   const manager = enabledAuthManagers.OpenID;

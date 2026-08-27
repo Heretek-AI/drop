@@ -14,20 +14,25 @@
       </h2>
       <div class="space-y-4 max-w-md">
         <div>
-          <label class="text-sm/6 font-medium text-zinc-100">
+          <label for="edit-name" class="text-sm/6 font-medium text-zinc-100">
             {{ $t("users.admin.groups.name") }}
           </label>
           <input
+            id="edit-name"
             v-model="editName"
             type="text"
             class="mt-1 block w-full rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
           />
         </div>
         <div>
-          <label class="text-sm/6 font-medium text-zinc-100">
+          <label
+            for="edit-description"
+            class="text-sm/6 font-medium text-zinc-100"
+          >
             {{ $t("users.admin.groups.descriptionField") }}
           </label>
           <input
+            id="edit-description"
             v-model="editDescription"
             type="text"
             class="mt-1 block w-full rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
@@ -89,6 +94,7 @@
       <div v-if="!oidcEnabled" class="mt-4 flex items-center gap-2">
         <select
           v-model="selectedUserId"
+          :aria-label="$t('users.admin.groups.addMember')"
           class="rounded-md bg-zinc-800 px-2 py-1.5 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
         >
           <option value="" disabled>
@@ -150,6 +156,7 @@
           min="0"
           max="18"
           step="1"
+          :aria-label="$t('users.admin.groups.maximumContentAge')"
           class="w-full cursor-pointer accent-blue-600"
         />
         <!-- eslint-disable @intlify/vue-i18n/no-raw-text -->
@@ -236,6 +243,7 @@
           <div v-if="showAddRating" class="mt-4 flex items-center gap-2">
             <select
               v-model="newRatingOrg"
+              aria-label="Rating organization"
               class="rounded-md bg-zinc-800 px-2 py-1 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
             >
               <option v-for="org in organizations" :key="org" :value="org">
@@ -245,6 +253,7 @@
             <select
               v-model="newRatingValue"
               :disabled="!newRatingOrg"
+              aria-label="Rating value"
               class="rounded-md bg-zinc-800 px-2 py-1 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
             >
               <option v-for="r in availableRatingsForOrg" :key="r" :value="r">

@@ -137,7 +137,7 @@ export class TorrentialService extends Service<unknown> {
       data: T;
     },
   ) {
-    if (!this.socket) throw "Not connected to torrential";
+    if (!this.socket) throw new Error("Not connected to torrential");
 
     const response = create(TorrentialBoundSchema, {
       messageId: messageId,
@@ -156,7 +156,7 @@ export class TorrentialService extends Service<unknown> {
   }
 
   private async queueRead() {
-    if (!this.socket) throw "Not connected to torrential";
+    if (!this.socket) throw new Error("Not connected to torrential");
     if (this.readbuf.length < 8) return;
     const sizeBytes = this.readbuf.subarray(0, 8);
     const size = sizeBytes.readBigUInt64LE(0);

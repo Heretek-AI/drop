@@ -40,7 +40,7 @@ export default defineEventHandler<{ body: typeof CreateLibrarySource.infer }>(
 
       // Test we can actually use it
       if ((await library.listGames()) === undefined) {
-        throw "Library failed to fetch games.";
+        throw new Error("Library failed to fetch games.");
       }
 
       const source = await prisma.library.create({

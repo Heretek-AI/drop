@@ -166,7 +166,9 @@ function fetchStatusStyleData(status: GameStatus): StatusStyleData {
         action: () => emit("resume"),
       };
     }
-    throw "Non-exhaustive install type: " + JSON.stringify(status.install_type);
+    throw new Error(
+      "Non-exhaustive install type: " + JSON.stringify(status.install_type),
+    );
   }
   return {
     style: styles[status.type],

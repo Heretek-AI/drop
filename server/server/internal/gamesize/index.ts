@@ -22,7 +22,7 @@ class GameSizeManager {
     cacheHandler.createCache<GameSizeBreakdown>("gameBreakdown");
 
   private gameVersionSizeCacheKey(versionId: string, previousId?: string) {
-    return `${versionId}${previousId ? `-from-${previousId}` : ""}`;
+    return previousId ? `${versionId}-from-${previousId}` : versionId;
   }
 
   /***

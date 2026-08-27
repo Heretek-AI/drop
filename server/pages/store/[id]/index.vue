@@ -53,11 +53,12 @@
           <table class="min-w-full">
             <tbody>
               <tr>
-                <td
+                <th
+                  scope="row"
                   class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-zinc-100 sm:pl-3"
                 >
                   {{ $t("store.released") }}
-                </td>
+                </th>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-zinc-400">
                   <time datetime="game.mReleased">
                     {{ $d(new Date(game.mReleased), "short") }}
@@ -65,11 +66,12 @@
                 </td>
               </tr>
               <tr>
-                <td
+                <th
+                  scope="row"
                   class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-zinc-100 sm:pl-3"
                 >
                   {{ $t("store.platform", platforms.length) }}
-                </td>
+                </th>
                 <td
                   class="whitespace-nowrap inline-flex gap-x-4 px-3 py-4 text-sm text-zinc-400"
                 >
@@ -87,11 +89,12 @@
                 </td>
               </tr>
               <tr>
-                <td
+                <th
+                  scope="row"
                   class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-zinc-100 sm:pl-3"
                 >
                   {{ $t("store.size") }}
-                </td>
+                </th>
                 <td
                   v-if="sizes.length > 0"
                   class="whitespace-nowrap inline-flex gap-x-4 px-3 py-4 text-sm text-zinc-400"
@@ -124,11 +127,12 @@
                 </td>
               </tr>
               <tr>
-                <td
+                <th
+                  scope="row"
                   class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-zinc-100 sm:pl-3"
                 >
                   {{ $t("store.rating") }}
-                </td>
+                </th>
                 <td
                   class="whitespace-nowrap flex flex-row items-center gap-x-1 px-3 py-4 text-sm text-zinc-400"
                 >

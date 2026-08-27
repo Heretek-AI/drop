@@ -6,6 +6,8 @@
       <img
         :src="bannerUrl"
         class="w-full h-[24rem] object-cover blur-sm scale-105"
+        alt=""
+        aria-hidden="true"
       />
       <div
         class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 to-transparent opacity-90"
@@ -130,6 +132,7 @@
                           :src="useObject(url)"
                           class="absolute inset-0 w-full h-full object-cover"
                           v-show="index === currentImageIndex"
+                          :alt="`${game.mName} screenshot ${index + 1}`"
                         />
                       </TransitionGroup>
                     </div>
@@ -385,7 +388,7 @@
           </div>
         </div>
         <div v-else class="w-full flex items-center justify-center p-4">
-          <div role="status">
+          <output>
             <svg
               aria-hidden="true"
               class="w-7 h-7 text-transparent animate-spin fill-white"
@@ -403,7 +406,7 @@
               />
             </svg>
             <span class="sr-only">Loading...</span>
-          </div>
+          </output>
         </div>
         <div v-if="installDirs">
           <InstallDirectorySelector

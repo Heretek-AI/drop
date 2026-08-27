@@ -46,7 +46,5 @@ export default defineClientEventHandler(
       h3.node.req,
       client.id,
     );
-
-    return;
   },
 );

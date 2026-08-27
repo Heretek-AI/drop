@@ -3,20 +3,20 @@ import { clsx } from 'clsx'
 export function PlusGrid({
   className = '',
   children,
-}: {
+}: Readonly<{
   className?: string
   children: React.ReactNode
-}) {
+}>) {
   return <div className={className}>{children}</div>
 }
 
 export function PlusGridRow({
   className = '',
   children,
-}: {
+}: Readonly<{
   className?: string
   children: React.ReactNode
-}) {
+}>) {
   return (
     <div
       className={clsx(
@@ -41,10 +41,10 @@ export function PlusGridRow({
 export function PlusGridItem({
   className = '',
   children,
-}: {
+}: Readonly<{
   className?: string
   children: React.ReactNode
-}) {
+}>) {
   return (
     <div className={clsx(className, 'group/item relative')}>
       <PlusGridIcon
@@ -68,10 +68,10 @@ export function PlusGridItem({
 export function PlusGridIcon({
   className = '',
   placement,
-}: {
+}: Readonly<{
   className?: string
   placement: `${'top' | 'bottom'} ${'right' | 'left'}`
-}) {
+}>) {
   let [yAxis, xAxis] = placement.split(' ')
 
   let yClass = yAxis === 'top' ? '-top-2' : '-bottom-2'

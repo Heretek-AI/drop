@@ -11,12 +11,12 @@ function Person({
   description,
   img,
   contributions,
-}: {
+}: Readonly<{
   name: string
   description: string
   img: string
   contributions: number
-}) {
+}>) {
   return (
     <li>
       <Link

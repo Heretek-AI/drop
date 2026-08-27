@@ -13,11 +13,11 @@ export function AnimatedNumber({
   start,
   end,
   decimals = 0,
-}: {
+}: Readonly<{
   start: number
   end: number
   decimals?: number
-}) {
+}>) {
   let ref = useRef(null)
   let isInView = useInView(ref, { once: true, amount: 0.5 })
 

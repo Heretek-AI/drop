@@ -115,10 +115,10 @@ export function Gallery() {
 export default function GalleryModal({
   img,
   close,
-}: {
+}: Readonly<{
   img?: string
   close: () => void
-}) {
+}>) {
   return (
     <Dialog open={!!img} onClose={close} className="relative z-10">
       <DialogBackdrop

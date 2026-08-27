@@ -8,11 +8,11 @@ function Circle({
   size,
   delay,
   opacity,
-}: {
+}: Readonly<{
   size: number
   delay: number
   opacity: string
-}) {
+}>) {
   return (
     <motion.div
       variants={{
@@ -64,12 +64,12 @@ function Logo({
   left,
   top,
   hover,
-}: {
+}: Readonly<{
   src: string
   left: number
   top: number
   hover: { x: number; y: number; rotate: number; delay: number }
-}) {
+}>) {
   return (
     <motion.img
       variants={{

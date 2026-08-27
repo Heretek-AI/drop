@@ -304,7 +304,7 @@ const descriptionHTML = micromark(game.mDescription);
 
 // const rating = Math.round(game.mReviewRating * 5);
 const averageRating = Math.round((rating._avg.mReviewRating ?? 0) * 5);
-const ratingArray = Array(5)
+const ratingArray = new Array(5)
   .fill(null)
   .map((_, i) => i + 1 <= averageRating);
 

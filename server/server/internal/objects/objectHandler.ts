@@ -210,8 +210,7 @@ export class ObjectHandler {
     const permissions = this.fetchPermissions(metadata.permissions, userId);
 
     const requiredPermissionIndex = 1;
-    const hasPermission =
-      permissions.find((e) => e >= requiredPermissionIndex) != undefined;
+    const hasPermission = permissions.some((e) => e >= requiredPermissionIndex);
 
     if (!hasPermission) return false;
 
@@ -235,8 +234,7 @@ export class ObjectHandler {
     const permissions = this.fetchPermissions(metadata.permissions, userId);
 
     const requiredPermissionIndex = 2;
-    const hasPermission =
-      permissions.find((e) => e >= requiredPermissionIndex) != undefined;
+    const hasPermission = permissions.some((e) => e >= requiredPermissionIndex);
 
     if (!hasPermission) return false;
 

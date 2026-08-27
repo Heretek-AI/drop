@@ -593,7 +593,7 @@ export class SteamProvider implements MetadataProvider {
     let titleMatch = ogTitleRegex.exec(html);
     titleMatch ??= titleTagRegex.exec(html);
 
-    return titleMatch && titleMatch[1]
+    return titleMatch?.[1]
       ? this._decodeHtmlEntities(titleMatch[1])
       : undefined;
   }
@@ -607,9 +607,7 @@ export class SteamProvider implements MetadataProvider {
     let descMatch = ogDescRegex.exec(html);
     descMatch ??= nameDescRegex.exec(html);
 
-    return descMatch && descMatch[1]
-      ? this._decodeHtmlEntities(descMatch[1])
-      : undefined;
+    return descMatch?.[1] ? this._decodeHtmlEntities(descMatch[1]) : undefined;
   }
 
   private _extractImage(html: string): string | undefined {

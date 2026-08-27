@@ -8,7 +8,7 @@ const b32r = new Map(Array.from(b32, (ch, i) => [ch, i])).set("=", 0);
 //ccount = 8 (= cbit / gcd(cbit, ubit)), ucount = 5 (= ubit / gcd(cbit, ubit))
 //cmask = 0x1f (= 2 ** cbit - 1), umask = 0xff (= 2 ** ubit - 1)
 //const b32pad = [0, 6, 4, 3, 1];
-const b32pad = Array.from(Array(5), (_, i) => ((8 - (i * 8) / 5) | 0) % 8);
+const b32pad = Array.from(new Array(5), (_, i) => ((8 - (i * 8) / 5) | 0) % 8);
 
 function b32e5(u1, u2 = 0, u3 = 0, u4 = 0, u5 = 0) {
   const u40 = u1 * 2 ** 32 + u2 * 2 ** 24 + u3 * 2 ** 16 + u4 * 2 ** 8 + u5;
@@ -47,7 +47,7 @@ export function b32e(u8a) {
   console.assert(u8a instanceof Uint8Array, u8a.constructor);
   const len = u8a.length,
     rem = len % 5;
-  const u5s = Array.from(Array((len - rem) / 5), (_, i) =>
+  const u5s = Array.from(new Array((len - rem) / 5), (_, i) =>
     u8a.subarray(i * 5, i * 5 + 5),
   );
   const pad = b32pad[rem];

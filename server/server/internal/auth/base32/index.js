@@ -8,7 +8,10 @@ const b32r = new Map(Array.from(b32, (ch, i) => [ch, i])).set("=", 0);
 //ccount = 8 (= cbit / gcd(cbit, ubit)), ucount = 5 (= ubit / gcd(cbit, ubit))
 //cmask = 0x1f (= 2 ** cbit - 1), umask = 0xff (= 2 ** ubit - 1)
 //const b32pad = [0, 6, 4, 3, 1];
-const b32pad = Array.from(new Array(5), (_, i) => ((8 - (i * 8) / 5) | 0) % 8);
+const b32pad = Array.from(
+  new Array(5),
+  (_, i) => Math.trunc(8 - (i * 8) / 5) % 8,
+);
 
 function b32e5(u1, u2 = 0, u3 = 0, u4 = 0, u5 = 0) {
   const u40 = u1 * 2 ** 32 + u2 * 2 ** 24 + u3 * 2 ** 16 + u4 * 2 ** 8 + u5;
@@ -64,6 +67,6 @@ export function b32d(bs) {
     rem = b32pad.indexOf(pad);
   console.assert(rem >= 0, pad);
   console.assert(/^[A-Z2-7+/]*$/.test(bs.slice(0, len - pad)), bs);
-  const u8s = [].concat(...bs.match(/.{8}/g).map((b8) => b32d8(...b8)));
+  const u8s = bs.match(/.{8}/g).flatMap((b8) => b32d8(...b8));
   return new Uint8Array(rem > 0 ? u8s.slice(0, rem - 5) : u8s);
 }

@@ -24,7 +24,7 @@ import { Shescape } from "shescape";
 import type { Prisma } from "~/prisma/client/client";
 
 export function createGameImportTaskId(libraryId: string, libraryPath: string) {
-  return createHash("md5")
+  return createHash("sha256")
     .update(`import:${libraryId}:${libraryPath}`)
     .digest("hex");
 }
@@ -33,7 +33,7 @@ export function createVersionImportTaskKey(
   gameId: string,
   versionName: string,
 ) {
-  return createHash("md5")
+  return createHash("sha256")
     .update(`import:${gameId}:${versionName}`)
     .digest("hex");
 }

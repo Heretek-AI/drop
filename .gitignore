@@ -1,3 +1,5 @@
 dist/
 node_modules/
 mitm_mcp_traffic.db
+/sonarcloud-drop2-issues.json
+/scripts/sonar-fix/

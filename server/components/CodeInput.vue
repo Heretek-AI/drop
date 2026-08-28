@@ -4,6 +4,7 @@
     ref="codeElements"
     :key="i"
     v-model="code[i - 1]"
+    aria-label="Code character"
     :class="[
       size,
       'uppercase appearance-none text-center bg-zinc-900 rounded-xl border-zinc-700 focus:border-blue-600 text-bold font-display text-zinc-100',

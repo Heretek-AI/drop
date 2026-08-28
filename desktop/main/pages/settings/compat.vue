@@ -209,6 +209,7 @@
                   class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0"
                 >
                   <button
+                    type="button"
                     @click="() => deleteCustom(pathIdx)"
                     class="text-red-400 hover:text-red-300"
                   >
@@ -289,7 +290,6 @@
 
 <script setup lang="ts">
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/16/solid";
-import { ExclamationTriangleIcon } from "@heroicons/vue/24/solid";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 

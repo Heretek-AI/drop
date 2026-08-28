@@ -27,9 +27,9 @@ export const generateMetadata = async ({
 
 export default async function BlogPost({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ slug: string }>
-}) {
+}>) {
   const aParams = await params
   const post = allPosts.find((post) => post._meta.path === aParams.slug)
   if (!post) notFound()

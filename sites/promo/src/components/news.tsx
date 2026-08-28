@@ -76,7 +76,10 @@ function FeaturedPosts() {
   )
 }
 
-function Posts({ page, category }: { page: number; category?: string }) {
+function Posts({
+  page,
+  category,
+}: Readonly<{ page: number; category?: string }>) {
   let posts = allPosts.slice((page - 1) * postsPerPage, page * postsPerPage)
 
   if (posts.length === 0 && (page > 1 || category)) {
@@ -135,7 +138,10 @@ function Posts({ page, category }: { page: number; category?: string }) {
   )
 }
 
-function Pagination({ page, category }: { page: number; category?: string }) {
+function Pagination({
+  page,
+  category,
+}: Readonly<{ page: number; category?: string }>) {
   function url(page: number) {
     let params = new URLSearchParams()
 
@@ -193,11 +199,16 @@ function Pagination({ page, category }: { page: number; category?: string }) {
 
 export default function News() {
   const paramsPage = useSearchParams().get('page')
-  let page = paramsPage
-    ? typeof paramsPage === 'string' && parseInt(paramsPage) > 1
-      ? parseInt(paramsPage)
-      : notFound()
-    : 1
+  let page = 1
+  if (
+    paramsPage &&
+    typeof paramsPage === 'string' &&
+    parseInt(paramsPage) > 1
+  ) {
+    page = parseInt(paramsPage)
+  } else if (paramsPage) {
+    notFound()
+  }
 
   return (
     <main className="overflow-hidden">

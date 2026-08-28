@@ -14,10 +14,7 @@ const posts = defineCollection({
     tags: z.string(),
   }),
   async transform(data, context) {
-    const paragraph = data.content
-      .split('\n')
-      .filter((e) => !e.startsWith('#'))
-      .at(0)
+    const paragraph = data.content.split('\n').find((e) => !e.startsWith('#'))
     const excerpt = paragraph!.split(' ').slice(0, 20).join(' ') + '...'
 
     const mdx = await compileMDX(context, data)

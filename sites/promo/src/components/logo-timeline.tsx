@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
 import { Mark } from './logo'
 
-function Row({ children }: { children: React.ReactNode }) {
+function Row({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="group relative">
       <div className="absolute inset-x-0 top-1/2 h-0.5 bg-linear-to-r from-white/15 from-[2px] to-[2px] bg-size-[12px_100%]" />
@@ -15,11 +15,11 @@ function Logo({
   label,
   src,
   className,
-}: {
+}: Readonly<{
   label: string
   src: string
   className: string
-}) {
+}>) {
   return (
     <div
       className={clsx(

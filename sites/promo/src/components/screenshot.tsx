@@ -5,12 +5,12 @@ export function Screenshot({
   height,
   src,
   className,
-}: {
+}: Readonly<{
   width: number
   height: number
   src: string
   className?: string
-}) {
+}>) {
   return (
     <div
       style={{ '--width': width, '--height': height } as React.CSSProperties}

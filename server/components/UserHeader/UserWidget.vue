@@ -6,6 +6,8 @@
           <img
             :src="useObject(user.profilePictureObjectId)"
             class="w-5 h-5 rounded-sm"
+            alt=""
+            aria-hidden="true"
           />
           <span class="ml-2 text-sm font-bold">{{ user.displayName }}</span>
           <ChevronDownIcon class="ml-3 h-4" />

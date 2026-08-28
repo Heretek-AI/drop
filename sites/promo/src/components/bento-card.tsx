@@ -12,7 +12,7 @@ export function BentoCard({
   description,
   graphic,
   fade = [],
-}: {
+}: Readonly<{
   dark?: boolean
   className?: string
   eyebrow: React.ReactNode
@@ -20,7 +20,7 @@ export function BentoCard({
   description: React.ReactNode
   graphic: React.ReactNode
   fade?: ('top' | 'bottom')[]
-}) {
+}>) {
   return (
     <motion.div
       initial="idle"

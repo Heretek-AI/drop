@@ -110,7 +110,7 @@ export default defineEventHandler(async (h3) => {
 
   const filters =
     rawFilters.length > 0
-      ? rawFilters.reduce((a, b) => deepmerge(a, b))
+      ? rawFilters.reduce((a, b) => deepmerge(a, b), {})
       : undefined;
 
   const results = await libraryManager.fetchGamesWithStatus({

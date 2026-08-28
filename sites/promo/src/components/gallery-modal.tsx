@@ -68,12 +68,9 @@ export function Gallery() {
 
   return (
     <Container className="py-10">
-      <div
-        role="list"
-        className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4"
-      >
+      <ul className="grid list-none grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4">
         {[0, 1, 2, 3].map((index) => (
-          <div key={index} className="flex flex-col gap-y-4">
+          <li key={index} className="flex flex-col gap-y-4">
             {files
               .filter((v, i) =>
                 v.column !== undefined ? index == v.column : i % 4 == index,
@@ -104,9 +101,9 @@ export function Gallery() {
                   </p>
                 </div>
               ))}
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
       <GalleryModal img={currentModal} close={resetModal} />
     </Container>
   )
@@ -115,10 +112,10 @@ export function Gallery() {
 export default function GalleryModal({
   img,
   close,
-}: {
+}: Readonly<{
   img?: string
   close: () => void
-}) {
+}>) {
   return (
     <Dialog open={!!img} onClose={close} className="relative z-10">
       <DialogBackdrop
@@ -134,6 +131,7 @@ export default function GalleryModal({
           >
             <img src={img} alt="" className="max-h-[90vh] w-full" />
             <button
+              type="button"
               className="absolute top-0 right-0 m-4 cursor-pointer rounded-xl bg-zinc-900 p-2 text-zinc-100 outline outline-zinc-700 hover:text-zinc-400"
               onClick={close}
             >

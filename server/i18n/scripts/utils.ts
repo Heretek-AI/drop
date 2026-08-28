@@ -21,7 +21,6 @@ function recursiveFindFiles(root: string): string[] {
     const stat = fs.statSync(absPath);
     if (stat.isDirectory()) {
       results.push(...recursiveFindFiles(absPath));
-      continue;
     }
   }
   return [...results, ...constPaths];
@@ -31,7 +30,7 @@ function recursiveFindFiles(root: string): string[] {
  * Fetches the paths of all files available to be localised
  */
 export function allLocalisableFiles(): string[] {
-  const files = paths.map((k) => recursiveFindFiles(k)).flat();
+  const files = paths.flatMap((k) => recursiveFindFiles(k));
 
   return files;
 }

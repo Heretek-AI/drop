@@ -1,5 +1,6 @@
 import type { H3Event } from "h3";
 import type {
+  OIDCData,
   Session,
   SessionSearchTerms,
   SessionProvider,
@@ -41,11 +42,11 @@ export interface SigninOptions {
   data?: Session["data"];
 
   // set oidc session data
-  oidc?: Session["oidc"];
+  oidc?: OIDCData;
 }
 
 export class SessionHandler {
-  private sessionProvider: SessionProvider;
+  private readonly sessionProvider: SessionProvider;
 
   constructor() {
     // Create a new provider

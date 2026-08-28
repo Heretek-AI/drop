@@ -1,12 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import type {
-  Game,
-  GameStatus,
-  GameStatusEnum,
-  GameVersion,
-  RawGameStatus,
-} from "~/types";
+import type { Game, GameStatus, GameVersion, RawGameStatus } from "~/types";
 
 const gameRegistry: {
   [key: string]: { game: Game; version: Ref<GameVersion | undefined> };

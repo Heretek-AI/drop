@@ -8,7 +8,12 @@
         >
           <div class="inline-flex items-center gap-4">
             <!-- icon image -->
-            <img :src="coreMetadataIconUrl" class="size-20" />
+            <img
+              :src="coreMetadataIconUrl"
+              class="size-20"
+              alt=""
+              aria-hidden="true"
+            />
             <div>
               <h1
                 class="text-2xl xl:text-5xl font-bold font-display text-zinc-100"
@@ -53,9 +58,9 @@
             </div>
           </div>
           <div class="flex flex-col">
-            <label class="text-sm/6 font-medium text-zinc-100">
+            <p class="text-sm/6 font-medium text-zinc-100">
               {{ $t("library.admin.game.ageRatings") }}
-            </label>
+            </p>
             <div class="mt-2 space-y-2">
               <div
                 v-for="(ar, idx) in ageRatings"
@@ -89,6 +94,7 @@
               <div v-if="showAddAgeRating" class="flex items-center gap-2">
                 <select
                   v-model="newAgeRatingOrg"
+                  aria-label="Age rating organization"
                   class="rounded-md bg-zinc-800 px-2 py-1 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
                 >
                   <option
@@ -102,6 +108,7 @@
                 <select
                   v-model="newAgeRatingValue"
                   :disabled="!newAgeRatingOrg"
+                  aria-label="Age rating value"
                   class="rounded-md bg-zinc-800 px-2 py-1 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
                 >
                   <option
@@ -180,7 +187,11 @@
           >
             <template #item="{ element }: { element: string }">
               <div class="relative group min-w-fit">
-                <img :src="useObject(element)" class="h-48 w-auto" />
+                <img
+                  :src="useObject(element)"
+                  class="h-48 w-auto"
+                  :alt="`${game.mName} carousel image`"
+                />
                 <div
                   class="transition-all lg:opacity-0 lg:group-hover:opacity-100 absolute inset-0 flex flex-col items-center justify-center gap-y-2 bg-zinc-950/50"
                 >
@@ -215,9 +226,8 @@
               >
                 <PencilIcon class="animate-pulse size-5 text-zinc-100" />
               </div>
-              <div
+              <output
                 v-else-if="descriptionSaving == DescriptionSavingState.Loading"
-                role="status"
               >
                 <svg
                   aria-hidden="true"
@@ -236,16 +246,20 @@
                   />
                 </svg>
                 <span class="sr-only">{{ $t("common.srLoading") }}</span>
-              </div>
+              </output>
             </div>
 
-            <button @click="() => (showAddImageDescriptionModal = true)">
+            <button
+              type="button"
+              @click="() => (showAddImageDescriptionModal = true)"
+            >
               <PhotoIcon
                 class="transition size-5 text-zinc-100 hover:text-zinc-300"
               />
             </button>
 
             <button
+              type="button"
               class="block lg:hidden"
               @click="
                 () => (mobileShowFinalDescription = !mobileShowFinalDescription)
@@ -273,6 +287,7 @@
               <textarea
                 ref="descriptionEditor"
                 v-model="game.mDescription"
+                aria-label="Description"
                 class="grow h-full w-full bg-zinc-950/30 text-zinc-100 border-zinc-900 rounded"
               />
             </div>
@@ -323,7 +338,11 @@
               :key="imageIdx"
               class="group relative flex items-center bg-zinc-950/30"
             >
-              <img :src="useObject(image)" class="w-full h-auto" />
+              <img
+                :src="useObject(image)"
+                class="w-full h-auto"
+                :alt="`${game.mName} image`"
+              />
               <div
                 class="transition-all lg:opacity-0 lg:group-hover:opacity-100 absolute inset-0 flex flex-col items-center justify-center gap-y-2 bg-zinc-950/50"
               >
@@ -399,7 +418,11 @@
             :key="imageIdx"
             class="group relative flex items-center bg-zinc-950/30"
           >
-            <img :src="useObject(image)" class="w-full h-auto" />
+            <img
+              :src="useObject(image)"
+              class="w-full h-auto"
+              :alt="`${game.mName} image`"
+            />
             <div
               class="transition-all lg:opacity-0 lg:group-hover:opacity-100 absolute inset-0 flex flex-col items-center justify-center gap-y-2 bg-zinc-950/50"
             >
@@ -439,7 +462,11 @@
             :key="imageIdx"
             class="group relative flex items-center bg-zinc-950/30"
           >
-            <img :src="useObject(image)" class="w-full h-auto" />
+            <img
+              :src="useObject(image)"
+              class="w-full h-auto"
+              :alt="`${game.mName} image`"
+            />
             <div
               class="transition-all lg:opacity-0 lg:group-hover:opacity-100 absolute inset-0 flex flex-col items-center justify-center gap-y-2 bg-zinc-950/50"
             >
@@ -476,7 +503,12 @@
         <div class="flex flex-col lg:flex-row gap-6">
           <!-- icon upload div -->
           <div class="flex flex-col items-center gap-4">
-            <img :src="coreMetadataIconUrl" class="size-24 aspect-square" />
+            <img
+              :src="coreMetadataIconUrl"
+              class="size-24 aspect-square"
+              alt=""
+              aria-hidden="true"
+            />
             <label for="file-upload">
               <span
                 type="button"

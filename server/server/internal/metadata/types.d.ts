@@ -1,7 +1,6 @@
 import type { Company, GameRating } from "~/prisma/client";
 import type { AgeRatingOrganization } from "~/prisma/client/enums";
 import type { TransactionDataType } from "../objects/transactional";
-import type { ObjectReference } from "../objects/objectHandler";
 
 export interface GameMetadataSearchResult {
   id: string;
@@ -52,10 +51,10 @@ export interface GameMetadata {
   ageRatings: GameMetadataAgeRating[];
 
   // Created with another utility function
-  icon: ObjectReference;
-  bannerId: ObjectReference;
-  coverId: ObjectReference;
-  images: ObjectReference[];
+  icon: string;
+  bannerId: string;
+  coverId: string;
+  images: string[];
 }
 
 export interface CompanyMetadata {
@@ -64,8 +63,8 @@ export interface CompanyMetadata {
   shortDescription: string;
   description: string;
 
-  logo: ObjectReference;
-  banner: ObjectReference;
+  logo: string;
+  banner: string;
   website: string;
 }
 
@@ -75,10 +74,10 @@ export interface _FetchGameMetadataParams {
 
   company: (query: string) => Promise<Company | undefined>;
 
-  createObject: (data: TransactionDataType) => ObjectReference;
+  createObject: (data: TransactionDataType) => string;
 }
 
 export interface _FetchCompanyMetadataParams {
   query: string;
-  createObject: (data: TransactionDataType) => ObjectReference;
+  createObject: (data: TransactionDataType) => string;
 }

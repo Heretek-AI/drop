@@ -5,7 +5,7 @@
  * It also provides the endpoints with information about unmatched games
  */
 
-import path from "path";
+import path from "node:path";
 import prisma from "../db/database";
 import { fuzzy } from "fast-fuzzy";
 import type { TaskRunContext } from "../tasks";
@@ -24,7 +24,7 @@ import { Shescape } from "shescape";
 import type { Prisma } from "~/prisma/client/client";
 
 export function createGameImportTaskId(libraryId: string, libraryPath: string) {
-  return createHash("md5")
+  return createHash("sha256")
     .update(`import:${libraryId}:${libraryPath}`)
     .digest("hex");
 }
@@ -33,7 +33,7 @@ export function createVersionImportTaskKey(
   gameId: string,
   versionName: string,
 ) {
-  return createHash("md5")
+  return createHash("sha256")
     .update(`import:${gameId}:${versionName}`)
     .digest("hex");
 }
@@ -63,8 +63,8 @@ export interface UnimportedVersionInformation {
 }
 
 class LibraryManager {
-  private libraries: Map<string, LibraryProvider<unknown>> = new Map();
-  private shescape = new Shescape({});
+  private readonly libraries: Map<string, LibraryProvider<unknown>> = new Map();
+  private readonly shescape = new Shescape({});
 
   addLibrary(library: LibraryProvider<unknown>) {
     this.libraries.set(library.id(), library);
@@ -181,7 +181,7 @@ class LibraryManager {
       const unimportedVersions = versions
         .filter(
           (e) =>
-            params.versions.findIndex((v) => v == e) == -1 &&
+            !params.versions.some((v) => v == e) &&
             !taskHandler.hasTaskKey(
               createVersionImportTaskKey(params.gameId, e),
             ),
@@ -444,12 +444,11 @@ class LibraryManager {
           statusCode: 400,
           message: 'Setup required in "setup mode".',
         });
-    } else {
-      if (metadata.launches.length == 0)
-        throw createError({
-          statusCode: 400,
-          message: "Launch executable is required.",
-        });
+    } else if (metadata.launches.length == 0) {
+      throw createError({
+        statusCode: 400,
+        message: "Launch executable is required.",
+      });
     }
 
     const game = await prisma.game.findUnique({
@@ -510,7 +509,9 @@ class LibraryManager {
             fileList = unimportedVersion.fileList;
             progress(90);
           } else {
-            throw "Could not find or create manifest for this version.";
+            throw new Error(
+              "Could not find or create manifest for this version.",
+            );
           }
 
           const largestIndex = await prisma.gameVersion.findFirst({

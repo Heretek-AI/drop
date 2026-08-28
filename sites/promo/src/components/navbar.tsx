@@ -77,7 +77,7 @@ function MobileNav() {
   )
 }
 
-export function Navbar({ banner }: { banner?: React.ReactNode }) {
+export function Navbar({ banner }: Readonly<{ banner?: React.ReactNode }>) {
   return (
     <Disclosure as="header" className="pt-12 sm:pt-16">
       <PlusGrid>

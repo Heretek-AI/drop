@@ -7,12 +7,12 @@ function Marker({
   top,
   offset,
   delay,
-}: {
+}: Readonly<{
   src: string
   top: number
   offset: number
   delay: number
-}) {
+}>) {
   return (
     <motion.div
       variants={{

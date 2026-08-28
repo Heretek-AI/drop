@@ -23,14 +23,14 @@ crates=(
 # Accumulate changed .rs files relative to repo root.
 changed_rs="$(git diff --name-only HEAD -- '*.rs' 2>/dev/null; git diff --cached --name-only -- '*.rs' 2>/dev/null)"
 # Falls back to previous-branch commit when @{push} isn't resolvable.
-if [ -z "$changed_rs" ]; then
+if [[ -z "$changed_rs" ]]; then
   upstream="$(git rev-parse --verify '@{push}' 2>/dev/null || git rev-parse --verify 'HEAD~1' 2>/dev/null || echo "")"
-  if [ -n "$upstream" ]; then
+  if [[ -n "$upstream" ]]; then
     changed_rs="$(git diff --name-only "$upstream..HEAD" -- '*.rs' 2>/dev/null)"
   fi
 fi
 
-if [ -z "$changed_rs" ]; then
+if [[ -z "$changed_rs" ]]; then
   echo "clippy-changed: no .rs changes; skipping"
   exit 0
 fi

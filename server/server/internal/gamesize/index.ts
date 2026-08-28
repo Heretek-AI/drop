@@ -16,13 +16,13 @@ export type GameSizeBreakdown = {
 };
 
 class GameSizeManager {
-  private gameVersionsSizesCache =
+  private readonly gameVersionsSizesCache =
     cacheHandler.createCache<GameVersionSize>("versionSizes");
-  private gameBreakdownCache =
+  private readonly gameBreakdownCache =
     cacheHandler.createCache<GameSizeBreakdown>("gameBreakdown");
 
   private gameVersionSizeCacheKey(versionId: string, previousId?: string) {
-    return `${versionId}${previousId ? `-from-${previousId}` : ""}`;
+    return previousId ? `${versionId}-from-${previousId}` : versionId;
   }
 
   /***

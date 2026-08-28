@@ -17,14 +17,14 @@ import { PriorityListIndexed } from "../utils/prioritylist";
 import { systemConfig } from "../config/sys-conf";
 import type { TaskRunContext } from "../tasks";
 import taskHandler, { wrapTaskContext } from "../tasks";
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import { fuzzy } from "fast-fuzzy";
 import { logger } from "~/server/internal/logging";
 import { createGameImportTaskId } from "../library";
 import type { GameTagModel } from "~/prisma/client/models";
 
 export class MissingMetadataProviderConfig extends Error {
-  private providerName: string;
+  private readonly providerName: string;
 
   constructor(configKey: string, providerName: string) {
     super(`Missing config item ${configKey} for ${providerName}`);
@@ -56,9 +56,9 @@ export abstract class MetadataProvider {
 
 export class MetadataHandler {
   // Ordered by priority
-  private providers: PriorityListIndexed<MetadataProvider> =
+  private readonly providers: PriorityListIndexed<MetadataProvider> =
     new PriorityListIndexed("source");
-  private objectHandler: ObjectTransactionalHandler =
+  private readonly objectHandler: ObjectTransactionalHandler =
     new ObjectTransactionalHandler();
 
   addProvider(provider: MetadataProvider, priority: number = 0) {
@@ -91,11 +91,11 @@ export class MetadataHandler {
         try {
           const results = await provider.search(query);
           const mappedResults: InternalGameMetadataResult[] = results.map(
-            (result) =>
-              Object.assign({}, result, {
-                sourceId: provider.source(),
-                sourceName: provider.name(),
-              }),
+            (result) => ({
+              ...result,
+              sourceId: provider.source(),
+              sourceName: provider.name(),
+            }),
           );
           resolve(mappedResults);
         } catch (e) {

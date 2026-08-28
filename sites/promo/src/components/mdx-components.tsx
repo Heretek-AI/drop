@@ -37,11 +37,9 @@ const components: MDXComponents = {
     <strong className="font-semibold text-zinc-100">{children}</strong>
   ),
   code: ({ children }) => (
-    <>
-      <code className="w-full rounded-xl bg-zinc-800 p-4 text-[15px]/8 font-semibold text-zinc-300">
-        {children}
-      </code>
-    </>
+    <code className="w-full rounded-xl bg-zinc-800 p-4 text-[15px]/8 font-semibold text-zinc-300">
+      {children}
+    </code>
   ),
   ul: ({ children }) => (
     <ul className="list-disc pl-4 text-base/8 marker:text-gray-400">

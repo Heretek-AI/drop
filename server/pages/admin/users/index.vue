@@ -119,6 +119,7 @@
                   >
                     <button
                       v-if="user.id !== currentUser?.id"
+                      type="button"
                       class="px-2 py-1 rounded bg-red-900/50 backdrop-blur-sm transition text-sm/6 font-semibold text-red-400 hover:text-red-100 inline-flex gap-x-2 items-center duration-200 hover:scale-105"
                       @click="() => setUserToDelete(user)"
                     >
@@ -147,6 +148,7 @@
         </div>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
+            type="button"
             class="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-500 hover:scale-105 hover:shadow-lg active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             @click="showCreateGroup = true"
           >
@@ -233,6 +235,7 @@
                         {{ $t("common.edit") }}
                       </NuxtLink>
                       <button
+                        type="button"
                         class="text-red-400 hover:text-red-300"
                         @click="groupToDelete = group"
                       >
@@ -262,20 +265,28 @@
         </h2>
         <div class="space-y-4">
           <div>
-            <label class="text-sm/6 font-medium text-zinc-100">
+            <label
+              for="new-group-name"
+              class="text-sm/6 font-medium text-zinc-100"
+            >
               {{ $t("users.admin.groups.name") }}
             </label>
             <input
+              id="new-group-name"
               v-model="newGroupName"
               type="text"
               class="mt-1 block w-full rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
             />
           </div>
           <div>
-            <label class="text-sm/6 font-medium text-zinc-100">
+            <label
+              for="new-group-description"
+              class="text-sm/6 font-medium text-zinc-100"
+            >
               {{ $t("users.admin.groups.descriptionField") }}
             </label>
             <input
+              id="new-group-description"
               v-model="newGroupDescription"
               type="text"
               class="mt-1 block w-full rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 outline outline-1 -outline-offset-1 outline-zinc-700 focus:outline-blue-600"
@@ -283,12 +294,14 @@
           </div>
           <div class="flex justify-end gap-2">
             <button
+              type="button"
               class="rounded-md px-3 py-2 text-sm font-semibold text-zinc-400 hover:text-zinc-300"
               @click="showCreateGroup = false"
             >
               {{ $t("cancel") }}
             </button>
             <button
+              type="button"
               class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500"
               :disabled="newGroupName.length < 2"
               @click="createGroup"
@@ -317,12 +330,14 @@
         </p>
         <div class="flex justify-end gap-2">
           <button
+            type="button"
             class="rounded-md px-3 py-2 text-sm font-semibold text-zinc-400 hover:text-zinc-300"
             @click="groupToDelete = undefined"
           >
             {{ $t("cancel") }}
           </button>
           <button
+            type="button"
             class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-500"
             @click="deleteGroup"
           >

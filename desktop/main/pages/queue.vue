@@ -99,7 +99,11 @@
                 ><ServerIcon class="size-5"
               /></span>
             </div>
-            <button @click="() => cancelGame(element.meta)" class="group">
+            <button
+              type="button"
+              @click="() => cancelGame(element.meta)"
+              class="group"
+            >
               <XMarkIcon
                 class="transition size-8 flex-none text-zinc-600 group-hover:text-zinc-300"
                 aria-hidden="true"

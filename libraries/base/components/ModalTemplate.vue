@@ -49,12 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Dialog,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue";
+import { Dialog, TransitionChild, TransitionRoot } from "@headlessui/vue";
 
 const open: Ref<boolean> = defineModel<boolean>() as any;
 const props = defineProps<{ sizeClass?: string }>();

@@ -1,7 +1,6 @@
 'use client'
 
 import * as Headless from '@headlessui/react'
-import { ArrowLongRightIcon } from '@heroicons/react/20/solid'
 import { clsx } from 'clsx'
 import {
   MotionValue,
@@ -20,7 +19,6 @@ import {
 } from 'react'
 import useMeasure, { type RectReadOnly } from 'react-use-measure'
 import { Container } from './container'
-import { Link } from './link'
 import { Heading, Subheading } from './text'
 
 function SponsorCard({
@@ -95,23 +93,6 @@ function SponsorCard({
 
 function CallToAction() {
   return <div />
-  return (
-    <div>
-      <p className="max-w-sm text-sm/6 text-gray-600">
-        Join the best sellers in the business and start using Radiant to hit
-        your targets today.
-      </p>
-      <div className="mt-2">
-        <Link
-          href="#"
-          className="inline-flex items-center gap-2 text-sm/6 font-medium text-pink-600"
-        >
-          Get started
-          <ArrowLongRightIcon className="size-5" />
-        </Link>
-      </div>
-    </div>
-  )
 }
 
 type Sponsor = {
@@ -241,7 +222,7 @@ export function Sponsors() {
         {sponsors &&
           sponsors.map(({ image, name, from }, testimonialIndex) => (
             <SponsorCard
-              key={testimonialIndex}
+              key={name}
               name={name}
               from={from}
               img={image}
@@ -259,7 +240,7 @@ export function Sponsors() {
             {sponsors &&
               sponsors.map(({ name }, i) => (
                 <Headless.Button
-                  key={i}
+                  key={name}
                   onClick={() => scrollTo(i)}
                   data-active={activeIndex === i ? true : undefined}
                   aria-label={`Scroll to sponsorship from ${name}`}

@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <ul role="list" class="divide-y divide-zinc-800">
+      <ul class="divide-y divide-zinc-800">
         <li
           v-for="invitation in invitations"
           :key="invitation.id"
@@ -87,7 +87,10 @@
                 </span>
               </p>
             </div>
-            <button @click="() => deleteInvitation(invitation.id)">
+            <button
+              type="button"
+              @click="() => deleteInvitation(invitation.id)"
+            >
               <TrashIcon
                 class="h-5 w-5 flex-none text-red-600"
                 aria-hidden="true"
@@ -421,7 +424,10 @@ const username = computed({
     return _username.value;
   },
   set(v) {
-    if (!v) return (_username.value = undefined);
+    if (!v) {
+      _username.value = undefined;
+      return;
+    }
     _username.value = v;
   },
 });
@@ -436,7 +442,10 @@ const email = computed({
     return _email.value;
   },
   set(v) {
-    if (!v) return (_email.value = undefined);
+    if (!v) {
+      _email.value = undefined;
+      return;
+    }
     _email.value = v;
   },
 });

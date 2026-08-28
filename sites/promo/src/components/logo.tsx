@@ -1,4 +1,4 @@
-export function Logo({ className }: { className?: string }) {
+export function Logo({ className }: Readonly<{ className?: string }>) {
   return (
     <div className="mt-1 inline-flex items-center gap-x-1">
       <svg
@@ -18,7 +18,7 @@ export function Logo({ className }: { className?: string }) {
   )
 }
 
-export function Mark({ className }: { className?: string }) {
+export function Mark({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}

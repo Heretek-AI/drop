@@ -17,12 +17,12 @@ function Key({
   width = 36,
   className,
   children,
-}: {
+}: Readonly<{
   name: string
   width?: number
   className?: string
   children?: React.ReactNode
-}) {
+}>) {
   let { highlighted } = useContext(KeyboardContext)
 
   return (
@@ -718,7 +718,7 @@ function ReturnKey() {
   )
 }
 
-function ShiftKey({ position }: { position: 'Left' | 'Right' }) {
+function ShiftKey({ position }: Readonly<{ position: 'Left' | 'Right' }>) {
   return (
     <Key name={`${position}Shift`} width={94}>
       <svg
@@ -866,7 +866,7 @@ function ControlKey() {
   )
 }
 
-function OptionKey({ position }: { position: 'Left' | 'Right' }) {
+function OptionKey({ position }: Readonly<{ position: 'Left' | 'Right' }>) {
   return (
     <Key name={`${position}Option`}>
       <svg
@@ -885,7 +885,7 @@ function OptionKey({ position }: { position: 'Left' | 'Right' }) {
   )
 }
 
-function CommandKey({ position }: { position: 'Left' | 'Right' }) {
+function CommandKey({ position }: Readonly<{ position: 'Left' | 'Right' }>) {
   return (
     <Key name={`${position}Command`} width={50}>
       <svg
@@ -948,7 +948,9 @@ function RightKey() {
   )
 }
 
-export function Keyboard({ highlighted = [] }: { highlighted?: string[] }) {
+export function Keyboard({
+  highlighted = [],
+}: Readonly<{ highlighted?: string[] }>) {
   return (
     <KeyboardContext.Provider value={{ highlighted }}>
       <div aria-hidden="true" className="flex flex-col gap-2">

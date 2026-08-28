@@ -20,7 +20,7 @@ export type NotificationCreateArgs = Pick<
 
 class NotificationSystem {
   // userId to acl to listenerId
-  private listeners = new Map<
+  private readonly listeners = new Map<
     string,
     Map<
       string,
@@ -66,8 +66,8 @@ class NotificationSystem {
   ) {
     for (const [_, listener] of this.listeners.get(userId) ?? []) {
       const hasSome =
-        notification.acls.findIndex(
-          (e) => listener.acls.findIndex((v) => v === e) != -1,
+        notification.acls.findIndex((e) =>
+          listener.acls.some((v) => v === e),
         ) != -1;
       if (hasSome) listener.callback(notification);
     }

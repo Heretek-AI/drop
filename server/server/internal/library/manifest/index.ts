@@ -1,12 +1,12 @@
 import cacheHandler from "../../cache";
 import prisma from "../../db/database";
-import { castManifest, type DropletManifest } from "./utils";
+import { castManifest, type V2Manifest } from "./utils";
 
 export type DownloadManifestDetails = {
   /***
    * Version ID to manifest
    */
-  manifests: { [key: string]: DropletManifest };
+  manifests: { [key: string]: V2Manifest };
   /***
    * File name to version ID
    */
@@ -33,7 +33,7 @@ export async function createDownloadManifestDetails(
   previous?: string,
   refresh = false,
 ): Promise<DownloadManifestDetails> {
-  const manifestKey = `${versionId}${previous ? `-from-${previous}` : ""}`;
+  const manifestKey = previous ? `${versionId}-from-${previous}` : versionId;
   if ((await manifestCache.has(manifestKey)) && !refresh)
     return (await manifestCache.get(manifestKey))!;
   const mainVersion = await prisma.gameVersion.findUnique({
@@ -101,7 +101,7 @@ export async function createDownloadManifestDetails(
     : undefined;
 
   // Now that we have our file list, filter the manifests
-  const manifests = new Map<string, DropletManifest>();
+  const manifests = new Map<string, V2Manifest>();
   for (const version of versionOrder) {
     const files = fileList
       .entries()

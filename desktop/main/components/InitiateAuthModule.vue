@@ -14,7 +14,7 @@
         <slot />
         <div class="mt-10">
           <div>
-            <div v-if="loading" role="status">
+            <output v-if="loading">
               <svg
                 aria-hidden="true"
                 class="w-5 h-5 text-transparent animate-spin fill-white"
@@ -32,9 +32,10 @@
                 />
               </svg>
               <span class="sr-only">Loading...</span>
-            </div>
+            </output>
             <span class="inline-flex gap-x-8 items-center" v-else>
               <button
+                type="button"
                 @click="() => authWrapper_wrapper()"
                 :disabled="loading"
                 class="px-3 py-1 inline-flex items-center gap-x-2 bg-zinc-700 rounded text-sm text-left font-semibold leading-7 text-white"
@@ -61,8 +62,9 @@
                 id="token"
                 name="token"
                 type="text"
-                autocomplete="token"
+                autocomplete="off"
                 required
+                aria-label="Token"
                 class="grow block w-full rounded-md border-0 py-1.5 px-3 shadow-sm bg-zinc-950/20 text-zinc-300 ring-1 ring-inset ring-zinc-800 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 v-model="manualToken"
               />

@@ -3,6 +3,8 @@
     <img
       :src="rawIcon ? game.icon : useObject(game.icon)"
       class="w-12 h-12 rounded-sm object-cover"
+      alt=""
+      aria-hidden="true"
     />
     <div class="flex flex-col items-left">
       <h1 class="font-semibold font-display text-lg text-zinc-100">

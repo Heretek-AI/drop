@@ -27,6 +27,7 @@
                   <input
                     v-model="v"
                     type="text"
+                    :aria-label="props.data.title"
                     :placeholder="props.data.placeholder"
                     class="block w-full rounded-md border-0 bg-zinc-800 py-1.5 text-white shadow-sm ring-1 ring-inset ring-zinc-700 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                   />
@@ -62,12 +63,6 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Dialog,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue";
 import type {
   ModalDatas,
   ModalEvents,

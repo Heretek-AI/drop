@@ -219,10 +219,10 @@ const downloads: {
 function DownloadCard({
   version,
   data,
-}: {
+}: Readonly<{
   version: Version
   data: (typeof downloads)[Platforms]
-}) {
+}>) {
   return (
     <div className="-m-2 grid grid-cols-1 rounded-4xl shadow-[inset_0_0_2px_1px_#ffffff4d] ring-1 ring-black/5 max-lg:mx-auto max-lg:w-full max-lg:max-w-md">
       <div className="grid grid-cols-1 rounded-4xl p-2 shadow-md shadow-black/5">

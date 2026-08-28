@@ -62,7 +62,7 @@ function GameVaultPlus() {
         alt="GameVault+ icon"
         className="size-4"
       />
-      GameVault+
+      <span>GameVault+</span>
     </div>
   )
 }
@@ -269,7 +269,7 @@ function Header() {
         <span className="rounded-xl bg-zinc-900 px-3 py-2 font-mono text-zinc-300">
           git&nbsp;diff
         </span>
-        ?
+        {'?'}
       </Heading>
       <Lead className="mt-6 max-w-3xl">
         A breakdown between the different projects available to you, put
@@ -286,8 +286,8 @@ function ProjectCards() {
       <Gradient className="absolute inset-x-2 top-48 bottom-0 rounded-4xl ring-1 ring-black/5 ring-inset" />
       <Container className="relative">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {projects.map((tier, tierIndex) => (
-            <ProjectCard key={tierIndex} tier={tier} />
+          {projects.map((tier) => (
+            <ProjectCard key={tier.slug} tier={tier} />
           ))}
         </div>
       </Container>
@@ -295,7 +295,7 @@ function ProjectCards() {
   )
 }
 
-function ProjectCard({ tier }: { tier: (typeof projects)[number] }) {
+function ProjectCard({ tier }: Readonly<{ tier: (typeof projects)[number] }>) {
   return (
     <div className="-m-2 grid grid-cols-1 rounded-4xl shadow-[inset_0_0_2px_1px_#ffffff4d] ring-1 ring-white/5 max-lg:mx-auto max-lg:w-full max-lg:max-w-md">
       <div className="grid grid-cols-1 rounded-4xl p-2 shadow-md shadow-black/5">
@@ -314,8 +314,8 @@ function ProjectCard({ tier }: { tier: (typeof projects)[number] }) {
               Key features:
             </h3>
             <ul className="mt-3 space-y-3">
-              {tier.highlights.map((props, featureIndex) => (
-                <FeatureItem key={featureIndex} {...props} />
+              {tier.highlights.map((props) => (
+                <FeatureItem key={props.description} {...props} />
               ))}
             </ul>
           </div>
@@ -325,15 +325,15 @@ function ProjectCard({ tier }: { tier: (typeof projects)[number] }) {
   )
 }
 
+function onlyUnique<T>(value: T, index: number, array: Array<T>) {
+  return array.indexOf(value) === index
+}
+
 function ProjectTable({
   selectedProject,
-}: {
+}: Readonly<{
   selectedProject: (typeof projects)[number]
-}) {
-  function onlyUnique<T>(value: T, index: number, array: Array<T>) {
-    return array.indexOf(value) === index
-  }
-
+}>) {
   const sections = projects
     .map((e) => Object.keys(e.features))
     .flat()
@@ -462,7 +462,34 @@ function ProjectTable({
                   {name}
                 </th>
                 {projects.map((project) => {
-                  let value = project.features[section]?.[name]
+                  const value = project.features[section]?.[name]
+
+                  let cellContent
+                  if (typeof value === 'function') {
+                    cellContent = value()
+                  } else if (value === true) {
+                    cellContent = (
+                      <>
+                        <CheckIcon className="size-4 fill-green-600" />
+                        <span className="sr-only">
+                          Included in {project.name}
+                        </span>
+                      </>
+                    )
+                  } else if (value === false || value === undefined) {
+                    cellContent = (
+                      <>
+                        <MinusIcon className="size-4 fill-gray-400" />
+                        <span className="sr-only">
+                          Not included in {project.name}
+                        </span>
+                      </>
+                    )
+                  } else {
+                    cellContent = (
+                      <div className="text-xs text-zinc-400">{value}</div>
+                    )
+                  }
 
                   return (
                     <td
@@ -472,25 +499,7 @@ function ProjectTable({
                       }
                       className="p-4 data-selected:table-cell max-sm:hidden"
                     >
-                      {typeof value === 'function' ? (
-                        <>{value()}</>
-                      ) : value === true ? (
-                        <>
-                          <CheckIcon className="size-4 fill-green-600" />
-                          <span className="sr-only">
-                            Included in {project.name}
-                          </span>
-                        </>
-                      ) : value === false || value === undefined ? (
-                        <>
-                          <MinusIcon className="size-4 fill-gray-400" />
-                          <span className="sr-only">
-                            Not included in {project.name}
-                          </span>
-                        </>
-                      ) : (
-                        <div className="text-xs text-zinc-400">{value}</div>
-                      )}
+                      {cellContent}
                     </td>
                   )
                 })}
@@ -507,11 +516,11 @@ function FeatureItem({
   description,
   disabled = false,
   paid = false,
-}: {
+}: Readonly<{
   description: string
   disabled?: boolean
   paid?: boolean
-}) {
+}>) {
   return (
     <li
       data-disabled={disabled ? true : undefined}

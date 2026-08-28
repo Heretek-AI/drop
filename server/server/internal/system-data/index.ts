@@ -1,4 +1,4 @@
-import os from "os";
+import os from "node:os";
 
 export type SystemData = {
   totalRam: number;
@@ -18,7 +18,7 @@ function getCPUInfo() {
   let irq = 0;
 
   for (const cpu in cpus) {
-    if (!Object.prototype.hasOwnProperty.call(cpus, cpu)) continue;
+    if (!Object.hasOwn(cpus, cpu)) continue;
     user += cpus[cpu].times.user;
     nice += cpus[cpu].times.nice;
     sys += cpus[cpu].times.sys;
@@ -36,7 +36,7 @@ function getCPUInfo() {
 
 class SystemManager {
   // userId to acl to listenerId
-  private listeners = new Map<
+  private readonly listeners = new Map<
     string,
     Map<string, { callback: (systemData: SystemData) => void }>
   >();

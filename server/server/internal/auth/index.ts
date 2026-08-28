@@ -11,7 +11,7 @@ class AuthManager {
     [AuthMec.OpenID]: undefined,
   };
 
-  private initFuncs: {
+  private readonly initFuncs: {
     [K in keyof typeof this.authProviders]: () => Promise<unknown>;
   } = {
     [AuthMec.OpenID]: OIDCManager.create,

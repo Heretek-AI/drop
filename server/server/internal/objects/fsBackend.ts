@@ -1,10 +1,10 @@
-import type { ObjectMetadata, ObjectReference, Source } from "./objectHandler";
+import type { ObjectMetadata, Source } from "./objectHandler";
 import { ObjectBackend, objectMetadata } from "./objectHandler";
 
-import fs from "fs";
-import path from "path";
-import { Readable } from "stream";
-import { createHash } from "crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { Readable } from "node:stream";
+import { createHash } from "node:crypto";
 import prisma from "../db/database";
 import cacheHandler from "../cache";
 import { systemConfig } from "../config/sys-conf";
@@ -13,11 +13,11 @@ import { logger } from "~/server/internal/logging";
 import type pino from "pino";
 
 export class FsObjectBackend extends ObjectBackend {
-  private baseObjectPath: string;
-  private baseMetadataPath: string;
+  private readonly baseObjectPath: string;
+  private readonly baseMetadataPath: string;
 
-  private hashStore = new FsHashStore();
-  private metadataCache =
+  private readonly hashStore = new FsHashStore();
+  private readonly metadataCache =
     cacheHandler.createCache<ObjectMetadata>("ObjectMetadata");
 
   constructor() {
@@ -30,7 +30,7 @@ export class FsObjectBackend extends ObjectBackend {
     fs.mkdirSync(this.baseMetadataPath, { recursive: true });
   }
 
-  async fetch(id: ObjectReference) {
+  async fetch(id: string) {
     const objectPath = path.join(this.baseObjectPath, id);
     // Open the file first and stream from the handle, so there is no window
     // between checking the file and using it.
@@ -58,7 +58,7 @@ export class FsObjectBackend extends ObjectBackend {
       })
       .on("close", () => void handle.close().catch(() => {}));
   }
-  async write(id: ObjectReference, source: Source): Promise<boolean> {
+  async write(id: string, source: Source): Promise<boolean> {
     const objectPath = path.join(this.baseObjectPath, id);
     // Open with 'r+' so we only write to a file that already exists (created
     // via create()); the check and the write go through the same fd.
@@ -90,7 +90,7 @@ export class FsObjectBackend extends ObjectBackend {
       await handle.close().catch(() => {});
     }
   }
-  async startWriteStream(id: ObjectReference) {
+  async startWriteStream(id: string) {
     const objectPath = path.join(this.baseObjectPath, id);
     // 'r+' fails when the file doesn't exist, replacing the existsSync pre-check.
     try {
@@ -106,7 +106,7 @@ export class FsObjectBackend extends ObjectBackend {
     id: string,
     source: Source,
     metadata: ObjectMetadata,
-  ): Promise<ObjectReference | undefined> {
+  ): Promise<string | undefined> {
     const objectPath = path.join(this.baseObjectPath, id);
     const metadataPath = path.join(this.baseMetadataPath, `${id}.json`);
 
@@ -146,12 +146,12 @@ export class FsObjectBackend extends ObjectBackend {
     if (!stream) throw new Error("Could not create write stream");
     return stream;
   }
-  async delete(id: ObjectReference): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const objectPath = path.join(this.baseObjectPath, id);
     try {
       await fs.promises.rm(objectPath);
     } catch {
-      return true;
+      // Object may already be gone; nothing to do.
     }
     const metadataPath = path.join(this.baseMetadataPath, `${id}.json`);
     try {
@@ -164,9 +164,7 @@ export class FsObjectBackend extends ObjectBackend {
     await this.hashStore.delete(id);
     return true;
   }
-  async fetchMetadata(
-    id: ObjectReference,
-  ): Promise<ObjectMetadata | undefined> {
+  async fetchMetadata(id: string): Promise<ObjectMetadata | undefined> {
     const cacheResult = await this.metadataCache.get(id);
     if (cacheResult !== null) return cacheResult;
 
@@ -188,10 +186,7 @@ export class FsObjectBackend extends ObjectBackend {
     await this.metadataCache.set(id, metadata);
     return metadata;
   }
-  async writeMetadata(
-    id: ObjectReference,
-    metadata: ObjectMetadata,
-  ): Promise<boolean> {
+  async writeMetadata(id: string, metadata: ObjectMetadata): Promise<boolean> {
     const metadataPath = path.join(this.baseMetadataPath, `${id}.json`);
     try {
       await fs.promises.writeFile(metadataPath, JSON.stringify(metadata), {
@@ -203,7 +198,7 @@ export class FsObjectBackend extends ObjectBackend {
     await this.metadataCache.set(id, metadata);
     return true;
   }
-  async fetchHash(id: ObjectReference): Promise<string | undefined> {
+  async fetchHash(id: string): Promise<string | undefined> {
     const cacheResult = await this.hashStore.get(id);
     if (cacheResult !== null) return cacheResult;
 
@@ -211,7 +206,7 @@ export class FsObjectBackend extends ObjectBackend {
     if (obj === undefined) return;
 
     // hash object
-    const hash = createHash("md5");
+    const hash = createHash("sha256");
     hash.setEncoding("hex");
 
     // local variable to point to object
@@ -271,14 +266,14 @@ export class FsObjectBackend extends ObjectBackend {
 }
 
 class FsHashStore {
-  private cache = cacheHandler.createCache<string>("ObjectHashStore");
+  private readonly cache = cacheHandler.createCache<string>("ObjectHashStore");
 
   /**
    * Gets hash of object
    * @param id
    * @returns
    */
-  async get(id: ObjectReference) {
+  async get(id: string) {
     const cacheRes = await this.cache.get(id);
     if (cacheRes !== null) {
       return cacheRes;
@@ -301,7 +296,7 @@ class FsHashStore {
    * Saves hash of object
    * @param id
    */
-  async save(id: ObjectReference, hash: string) {
+  async save(id: string, hash: string) {
     await prisma.objectHash.upsert({
       where: {
         id,
@@ -321,7 +316,7 @@ class FsHashStore {
    * Hash is no longer valid for whatever reason
    * @param id
    */
-  async delete(id: ObjectReference) {
+  async delete(id: string) {
     await this.cache.remove(id);
     await prisma.objectHash.deleteMany({
       where: {
